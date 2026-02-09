@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { ArrowRight, Loader2, Lock } from 'lucide-react';
-import { cn } from '../../lib/utils';
+
 
 export default function Login() {
     const [email, setEmail] = useState('');

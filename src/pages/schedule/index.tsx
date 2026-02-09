@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, Plus, X, Pencil, MoreVertical } from 'lucide-react';
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, Plus, X, Pencil } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { addDays, format, startOfWeek, addWeeks, subWeeks, isSameDay, parse } from 'date-fns';
 import { ptBR } from 'date-fns/locale';

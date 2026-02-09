@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, User, Bot, Loader2, ArrowLeft, ThumbsUp, ThumbsDown, Check } from 'lucide-react';
+import { Send, User, Bot, Loader2, ArrowLeft, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { sendMessageToAssistant } from '../../lib/ai-service';
 import { cn } from '../../lib/utils';
 

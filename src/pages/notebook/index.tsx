@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FileText, Sparkles, AlertCircle, PlayCircle, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import { FileText, Sparkles, AlertCircle, PlayCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 interface SavedContent {

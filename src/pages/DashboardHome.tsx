@@ -1,4 +1,4 @@
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp, Award, Clock, Target, Rocket, ArrowRight } from 'lucide-react';
 
 const STATS = [
@@ -8,13 +8,7 @@ const STATS = [
     { title: 'Dias Seguidos', value: '3', sub: 'Recorde: 14', icon: TrendingUp, color: 'text-purple-600', bg: 'bg-purple-50' },
 ];
 
-const DATA = [
-    { name: 'Matemática', corretas: 65, erradas: 35 },
-    { name: 'Humanas', corretas: 40, erradas: 60 },
-    { name: 'Natureza', corretas: 55, erradas: 45 },
-    { name: 'Linguagens', corretas: 75, erradas: 25 },
-    { name: 'Linguagens', corretas: 75, erradas: 25 },
-];
+
 
 const ESSAY_DATA = [
     { data: '10/01', nota: 640 },

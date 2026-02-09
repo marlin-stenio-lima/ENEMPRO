@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase';
+
 
 const API_KEYS = [
     import.meta.env.VITE_ABACATE_KEY_1,
@@ -109,6 +109,9 @@ export class AbacatePayService {
                 source: "enem-pro-checkout"
             }
         };
+
+        // Debug log
+        console.log("Creating PIX charge with payload:", payload);
 
         return this.request('/pixQrCode/create', {
             method: 'POST',

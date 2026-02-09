@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Loader2, ChevronDown, ChevronUp, Image as ImageIcon, Filter, Search, BookOpen, Bot, Sparkles } from 'lucide-react';
+import { Loader2, ChevronDown, Search, BookOpen, Bot, Sparkles } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 // Dynamic import for AI to keep bundle size optimized if we expand it later
@@ -40,7 +40,7 @@ export default function QuestionBank() {
 
     // Filters
     const [yearFilter, setYearFilter] = useState('');
-    const [dayFilter, setDayFilter] = useState('');
+    const [dayFilter] = useState('');
     const [areaFilter, setAreaFilter] = useState('');
     const [searchText, setSearchText] = useState('');
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { PenTool, Send, Sparkles, BookOpen, X, Lock } from 'lucide-react';
+import { PenTool, Send, Sparkles, BookOpen } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { generateEssayTopic, gradeEssay } from '../../lib/ai-service';
 import ChatInterface from '../assistant/ChatInterface';
@@ -37,7 +37,7 @@ export default function EssayGrader() {
             const user = JSON.parse(userStr);
             setUserPlan(user.plan || 'start');
 
-            const { data, error } = await supabase
+            const { data, error: _error } = await supabase
                 .from('saas_leads')
                 .select('essays_current_month, essays_extra_balance')
                 .eq('email', user.email)
