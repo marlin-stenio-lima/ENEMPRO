@@ -1,0 +1,5 @@
+pymupdf
+Pillow
+supabase
+python-dotenv
+requests

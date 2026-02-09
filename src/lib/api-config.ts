@@ -1,0 +1,15 @@
+export const API_KEYS = {
+    QUESTOES_CRONOGRAMA: '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',
+    REDACAO: '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',
+    MATEMATICA_FISICA: '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',
+    HUMANAS: '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',
+    NATUREZA: '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',
+    GEO_ATUALIDADES: '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',
+    YOUTUBE: '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'
+};
+
+export type AgentType = keyof typeof API_KEYS;
+
+export const getApiKey = (agent: AgentType): string => {
+    return API_KEYS[agent];
+};
