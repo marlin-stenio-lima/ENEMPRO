@@ -119,43 +119,33 @@ export default function LandingPage() {
                     <h2 className="text-sm font-bold text-indigo-600 uppercase tracking-widest mb-3">Depoimentos Reais</h2>
                     <h3 className="text-3xl font-bold text-gray-900 mb-12">O que nossos alunos estão dizendo</h3>
 
-                    <div className="grid md:grid-cols-3 gap-6">
-                        <TestimonialCard
-                            quote="Gente, eu precisava vir aqui agradecer! Minha nota na redação do último simulado foi surreal! 😭 Eu tava travada nos 700 e consegui um 960!"
-                            author="Rafaela"
-                            role="Nota 960 na Redação"
-                            color="text-indigo-600"
-                        />
-                        <TestimonialCard
-                            quote="Cara, a plataforma é insana! Eu sempre zerei Geometria... Fiz um simulado ontem e acertei TODAS as de espacial e plana! A IA explica melhor que qualquer professor."
-                            author="Fernando"
-                            role="Dominou Geometria"
-                            color="text-indigo-600"
-                        />
-                        <TestimonialCard
-                            quote="Minha nota em Matemática no último simulado foi de 550 pra 880! 📈 Aquela ferramenta de questões personalizadas e as explicações da IA salvaram minha vida."
-                            author="Ricardo"
-                            role="+330 Pontos em Matemática"
-                            color="text-indigo-600"
-                        />
-                        <TestimonialCard
-                            quote="Minha nota na redação subiu de 680 pra 920 no último simulado!!! 🚀 As correções da IA e as dicas foram essenciais. Tô muito feliz!"
-                            author="Beatriz"
-                            role="Evolução na Redação"
-                            color="text-green-600"
-                        />
-                        <TestimonialCard
-                            quote="Eu tava desesperado com Física, principalmente Eletrodinâmica... Mas depois das explicações passo a passo da IA, eu finalmente entendi os circuitos!"
-                            author="Diego"
-                            role="Foco em Física"
-                            color="text-green-600"
-                        />
-                        <TestimonialCard
-                            quote="O cronograma se adaptou perfeitamente ao meu trabalho. Recomendo demais para quem tem pouco tempo e precisa de foco total."
-                            author="Camila S."
-                            role="Enfermagem UFRJ"
-                            color="text-green-600"
-                        />
+                    <div className="grid md:grid-cols-3 gap-6 items-start">
+                        {/* Coluna Esquerda (Instagram - Rafaela) */}
+                        <div className="space-y-6">
+                            <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                                <img src="/testimonials/t2.jpg" alt="Depoimento Rafaela" className="w-full h-auto rounded-xl" loading="lazy" />
+                            </div>
+                        </div>
+
+                        {/* Coluna do Meio (WhatsApp - Beatriz, Ricardo, Fernando) */}
+                        <div className="space-y-6">
+                            <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                                <img src="/testimonials/t4.jpg" alt="Depoimento Beatriz" className="w-full h-auto rounded-xl" loading="lazy" />
+                            </div>
+                            <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                                <img src="/testimonials/t3.jpg" alt="Depoimento Ricardo" className="w-full h-auto rounded-xl" loading="lazy" />
+                            </div>
+                            <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                                <img src="/testimonials/t5.jpg" alt="Depoimento Fernando" className="w-full h-auto rounded-xl" loading="lazy" />
+                            </div>
+                        </div>
+
+                        {/* Coluna Direita (Instagram - Diego) */}
+                        <div className="space-y-6">
+                            <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                                <img src="/testimonials/t1.jpg" alt="Depoimento Diego" className="w-full h-auto rounded-xl" loading="lazy" />
+                            </div>
+                        </div>
                     </div>
 
                     <p className="mt-8 text-sm font-bold text-gray-400 uppercase tracking-widest animate-pulse">
@@ -251,14 +241,4 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode, titl
     );
 }
 
-function TestimonialCard({ quote, author, role, color }: { quote: string, author: string, role: string, color: string }) {
-    return (
-        <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-between h-full text-left">
-            <p className="text-gray-700 italic mb-6 leading-relaxed">"{quote}"</p>
-            <div>
-                <p className={`text-sm font-bold ${color}`}>{author}</p>
-                <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">{role}</p>
-            </div>
-        </div>
-    );
-}
+

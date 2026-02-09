@@ -7,7 +7,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 const PLANS = {
     start: {
         price: 990,
-        name: 'Plano Semanal',
+        name: 'Plano Enem Pro',
         id: 'start',
         features: [
             'Professores IA para cada área do ENEM',
@@ -41,7 +41,7 @@ export default function Checkout() {
 
     const [billingId, setBillingId] = useState<string | null>(null);
     const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
-    const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
+
 
     const [showBumpModal, setShowBumpModal] = useState(false);
 
@@ -163,7 +163,7 @@ export default function Checkout() {
                         </h3>
 
                         <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-                            Você escolheu o plano semanal por <strong className="text-gray-900">R$ 9,90</strong>. Mas por apenas uma única vez de <strong className="text-green-600 text-lg">R$ 98,90</strong>, você libera o acesso <strong>VITALÍCIO</strong> ao Enem Pro Medicina.
+                            Você escolheu o <strong className="text-gray-900">Plano Enem Pro</strong> por <strong className="text-gray-900">R$ 9,90</strong>. Mas por apenas uma única vez de <strong className="text-green-600 text-lg">R$ 98,90</strong>, você libera o acesso <strong>VITALÍCIO</strong> ao Enem Pro Medicina.
                         </p>
 
                         <div className="bg-yellow-50 rounded-lg p-4 mb-6 space-y-2 border border-yellow-100">
@@ -185,7 +185,7 @@ export default function Checkout() {
                                 onClick={handleDeclineBump}
                                 className="w-full bg-transparent text-gray-500 font-medium py-2 hover:text-gray-700 text-xs transition-colors"
                             >
-                                Não, vou continuar pagando por semana
+                                Não, vou continuar no plano atual
                             </button>
                         </div>
                     </div>
