@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Users, DollarSign, Brain, Activity, Lock, Unlock, Search, ArrowLeft, Plus, X } from 'lucide-react';
+import { Users, DollarSign, Brain, Activity, Lock, Unlock, Search, ArrowLeft, Plus, X, Trash2 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { format } from 'date-fns';
 
@@ -42,6 +42,7 @@ export default function AdminDashboard() {
         name: '',
         email: '',
         plan: 'pro',
+        customPrice: 129.90, // Default for 'pro'
         status: 'active' as const
     });
 
@@ -89,18 +90,34 @@ export default function AdminDashboard() {
                     plan: newUser.plan,
                     status: newUser.status,
                     purchase_date: new Date().toISOString(),
-                    purchase_price: PLAN_PRICES[newUser.plan] || 0
+                    purchase_price: newUser.customPrice
                 }
             ]);
 
             if (error) throw error;
 
             setIsModalOpen(false);
-            setNewUser({ name: '', email: '', plan: 'pro', status: 'active' }); // Reset
+            setNewUser({ name: '', email: '', plan: 'pro', status: 'active', customPrice: 129.90 }); // Reset
             fetchLeads(); // Refresh list to show new user
         } catch (error) {
             console.error('Error creating user:', error);
             alert('Erro ao criar usuário. Verifique se o email já existe ou permissões.');
+        }
+    };
+
+    const deleteLead = async (id: string) => {
+        if (!confirm('Tem certeza que deseja excluir este aluno?')) return;
+
+        // Optimistic
+        setLeads(leads.filter(l => l.id !== id));
+
+        try {
+            const { error } = await supabase.from('saas_leads').delete().eq('id', id);
+            if (error) throw error;
+        } catch (e) {
+            console.error('Error deleting lead:', e);
+            fetchLeads(); // Revert
+            alert('Erro ao excluir aluno.');
         }
     };
 
@@ -337,18 +354,25 @@ export default function AdminDashboard() {
                                                 </span>
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                                        <td className="px-6 py-4 whitespace-nowrap text-center flex items-center justify-center gap-2">
                                             <button
                                                 onClick={() => toggleStatus(lead.id, lead.status)}
                                                 className={cn(
                                                     "p-1.5 rounded-lg transition-all border",
                                                     lead.status === 'active'
-                                                        ? "text-red-600 hover:bg-red-50 border-transparent hover:border-red-100"
-                                                        : "text-green-600 hover:bg-green-50 border-transparent hover:border-green-100"
+                                                        ? "text-rose-600 hover:bg-rose-50 border-transparent hover:border-rose-100"
+                                                        : "text-emerald-600 hover:bg-emerald-50 border-transparent hover:border-emerald-100"
                                                 )}
                                                 title={lead.status === 'active' ? "Bloquear Acesso" : "Liberar Acesso"}
                                             >
                                                 {lead.status === 'active' ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
+                                            </button>
+                                            <button
+                                                onClick={() => deleteLead(lead.id)}
+                                                className="p-1.5 rounded-lg transition-all border border-transparent hover:bg-gray-100 hover:border-gray-200 text-gray-400 hover:text-red-500"
+                                                title="Excluir Aluno"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
                                             </button>
                                         </td>
                                     </tr>
@@ -406,11 +430,18 @@ export default function AdminDashboard() {
                                     <select
                                         className="w-full border-2 border-gray-200 p-2 text-sm font-bold focus:border-black focus:outline-none bg-white"
                                         value={newUser.plan}
-                                        onChange={e => setNewUser({ ...newUser, plan: e.target.value })}
+                                        onChange={e => {
+                                            const newPlan = e.target.value;
+                                            setNewUser({
+                                                ...newUser,
+                                                plan: newPlan,
+                                                customPrice: PLAN_PRICES[newPlan] || 0
+                                            });
+                                        }}
                                     >
-                                        <option value="start">Start (R$ 49,90)</option>
-                                        <option value="pro">Pro (R$ 129,90)</option>
-                                        <option value="advanced">Advanced (R$ 199,90)</option>
+                                        <option value="start">Start</option>
+                                        <option value="pro">Pro</option>
+                                        <option value="advanced">Advanced</option>
                                     </select>
                                 </div>
 
