@@ -191,28 +191,53 @@ export default function LandingPage() {
                     <div className="grid md:grid-cols-3 gap-6 items-start">
                         {/* Coluna Esquerda (Instagram - Rafaela) */}
                         <div className="space-y-6">
-                            <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
-                                <img src="/testimonials/t2.jpg" alt="Depoimento Rafaela" className="w-full h-auto rounded-xl" loading="lazy" />
+                            <div className="mx-auto max-w-[280px]">
+                                <img
+                                    src="/testimonials/t2.jpg"
+                                    alt="Depoimento Rafaela"
+                                    className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
+                                    loading="lazy"
+                                />
                             </div>
                         </div>
 
                         {/* Coluna do Meio (WhatsApp - Beatriz, Ricardo, Fernando) */}
                         <div className="space-y-6">
-                            <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
-                                <img src="/testimonials/t4.jpg" alt="Depoimento Beatriz" className="w-full h-auto rounded-xl" loading="lazy" />
+                            <div className="mx-auto max-w-[280px]">
+                                <img
+                                    src="/testimonials/t4.jpg"
+                                    alt="Depoimento Beatriz"
+                                    className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
+                                    loading="lazy"
+                                />
                             </div>
-                            <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
-                                <img src="/testimonials/t3.jpg" alt="Depoimento Ricardo" className="w-full h-auto rounded-xl" loading="lazy" />
+                            <div className="mx-auto max-w-[280px]">
+                                <img
+                                    src="/testimonials/t3.jpg"
+                                    alt="Depoimento Ricardo"
+                                    className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
+                                    loading="lazy"
+                                />
                             </div>
-                            <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
-                                <img src="/testimonials/t5.jpg" alt="Depoimento Fernando" className="w-full h-auto rounded-xl" loading="lazy" />
+                            <div className="mx-auto max-w-[280px]">
+                                <img
+                                    src="/testimonials/t5.jpg"
+                                    alt="Depoimento Fernando"
+                                    className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
+                                    loading="lazy"
+                                />
                             </div>
                         </div>
 
                         {/* Coluna Direita (Instagram - Diego) */}
                         <div className="space-y-6">
-                            <div className="bg-white p-2 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
-                                <img src="/testimonials/t1.jpg" alt="Depoimento Diego" className="w-full h-auto rounded-xl" loading="lazy" />
+                            <div className="mx-auto max-w-[280px]">
+                                <img
+                                    src="/testimonials/t1.jpg"
+                                    alt="Depoimento Diego"
+                                    className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
+                                    loading="lazy"
+                                />
                             </div>
                         </div>
                     </div>
@@ -281,19 +306,6 @@ export default function LandingPage() {
                     </div>
                 </div>
             </section>
-            {/* Footer */}
-            <footer className="bg-white py-12 border-t border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-2">
-                        <div className="h-6 w-6 bg-gray-900 rounded flex items-center justify-center">
-                            <Brain className="h-3 w-3 text-white" />
-                        </div>
-                        <span className="font-bold text-lg text-gray-900">Enem.Pro</span>
-                    </div>
-                    <p className="text-sm text-gray-500">© 2024 Enem.Pro. Todos os direitos reservados.</p>
-                </div>
-            </footer>
-
         </div>
     );
 }
