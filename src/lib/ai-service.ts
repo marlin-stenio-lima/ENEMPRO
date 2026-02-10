@@ -28,11 +28,9 @@ const getClient = (agent: AgentType) => {
 const MODEL = "gpt-4o-mini"; // Cost-effective, high intelligence
 
 // HELPER: Centralized OpenAI Caller (Proxy vs Local)
-async function callOpenAI(client: OpenAI, messages: any[], responseFormat: any = null) {
+async function callOpenAI(apiKey: string, messages: any[], responseFormat: any = null) {
     // PROXY LOGIC (Production)
     if (!import.meta.env.DEV) {
-        const apiKey = (client as any).apiKey; // Extract key from client instance
-
         const response = await fetch('/.netlify/functions/openai', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -53,6 +51,7 @@ async function callOpenAI(client: OpenAI, messages: any[], responseFormat: any =
     }
 
     // LOCAL LOGIC (Development)
+    const client = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
     return await client.chat.completions.create({
         model: MODEL,
         messages: messages as any,
