@@ -17,9 +17,8 @@ interface Lead {
     interaction_count?: number; // Mock or joined
 }
 const PLAN_PRICES: Record<string, number> = {
-    'start': 49.90,
-    'pro': 129.90,
-    'advanced': 199.90
+    'semanal': 9.90,
+    'vitalicio': 98.90
 };
 
 export default function AdminDashboard() {
@@ -431,6 +430,10 @@ export default function AdminDashboard() {
                                         className="w-full border-2 border-gray-200 p-2 text-sm font-bold focus:border-black focus:outline-none bg-white"
                                         value={newUser.plan}
                                         onChange={e => {
+                                            const PLAN_PRICES: Record<string, number> = {
+                                                'semanal': 9.90,
+                                                'vitalicio': 98.90
+                                            };
                                             const newPlan = e.target.value;
                                             setNewUser({
                                                 ...newUser,
@@ -439,9 +442,8 @@ export default function AdminDashboard() {
                                             });
                                         }}
                                     >
-                                        <option value="start">Start</option>
-                                        <option value="pro">Pro</option>
-                                        <option value="advanced">Advanced</option>
+                                        <option value="semanal">Semanal (R$ 9,90)</option>
+                                        <option value="vitalicio">Vitalício (R$ 98,90)</option>
                                     </select>
                                 </div>
 

@@ -93,6 +93,20 @@ export default function EssayGrader() {
             }
 
             setResult(aiResult);
+
+            // SAVE SUBMISSION
+            try {
+                await supabase.from('essay_submissions').insert({
+                    user_email: user.email,
+                    topic: topic,
+                    essay_text: essay,
+                    score: aiResult.score,
+                    competencies_json: aiResult.competencies
+                });
+            } catch (saveError) {
+                console.error("Failed to save essay submission", saveError);
+            }
+
         } catch (e) {
             console.error(e);
             alert("Erro ao processar uso. Tente novamente.");

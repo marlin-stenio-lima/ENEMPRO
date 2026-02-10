@@ -27,6 +27,36 @@ const getClient = (agent: AgentType) => {
 
 const MODEL = "gpt-4o-mini"; // Cost-effective, high intelligence
 
+// HELPER: Centralized OpenAI Caller (Proxy vs Local)
+async function callOpenAI(client: OpenAI, messages: any[], responseFormat: any = null) {
+    // PROXY LOGIC (Production)
+    if (!import.meta.env.DEV) {
+        const apiKey = (client as any).apiKey; // Extract key from client instance
+
+        const response = await fetch('/.netlify/functions/openai', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages,
+                model: MODEL,
+                apiKey: apiKey
+            })
+        });
+
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+        return data; // Returns the full completion object
+    }
+
+    // LOCAL LOGIC (Development)
+    return await client.chat.completions.create({
+        model: MODEL,
+        messages: messages as any,
+        response_format: responseFormat
+    });
+}
+
+
 // 1. QUESTION EXPLANATION
 interface AIExplanation {
     context: string;
@@ -40,15 +70,12 @@ export const generateExplanation = async (questionText: string, correctAnswer: s
 
     try {
         const userPrompt = buildUserPrompt(questionText, correctAnswer, studentAnswer);
+        const messages = [
+            { role: "system", content: AI_TUTOR_SYSTEM_PROMPT },
+            { role: "user", content: userPrompt }
+        ];
 
-        const completion = await client.chat.completions.create({
-            model: MODEL,
-            messages: [
-                { role: "system", content: AI_TUTOR_SYSTEM_PROMPT },
-                { role: "user", content: userPrompt }
-            ],
-            response_format: { type: "json_object" }
-        });
+        const completion = await callOpenAI(client, messages, { type: "json_object" });
 
         const content = completion.choices[0].message.content;
         if (!content) throw new Error("Empty response");
@@ -72,13 +99,12 @@ export const generateEssayTopic = async (): Promise<string> => {
     if (!client) return "Tecnologia e sociedade (Mock)";
 
     try {
-        const completion = await client.chat.completions.create({
-            model: MODEL,
-            messages: [
-                { role: "system", content: ESSAY_TOPIC_SYSTEM_PROMPT },
-                { role: "user", content: buildEssayTopicPrompt() }
-            ]
-        });
+        const messages = [
+            { role: "system", content: ESSAY_TOPIC_SYSTEM_PROMPT },
+            { role: "user", content: buildEssayTopicPrompt() }
+        ];
+
+        const completion = await callOpenAI(client, messages);
 
         return completion.choices[0].message.content?.trim() || "Tema não gerado";
     } catch (error) {
@@ -134,10 +160,7 @@ export const sendMessageToAssistant = async (
 
         messages.push({ role: "user", content: message });
 
-        const completion = await client.chat.completions.create({
-            model: MODEL,
-            messages: messages,
-        });
+        const completion = await callOpenAI(client, messages);
 
         // Log Usage (Fire and Forget)
         try {
@@ -165,13 +188,12 @@ export const analyzeVideoContent = async (videoTitle: string, channelTitle: stri
         const systemInstruction = PERSONA_PROMPTS['video_analyst'];
         const userContent = `VÍDEO PARA ANÁLISE:\nTítulo: ${videoTitle}\nCanal: ${channelTitle}`;
 
-        const completion = await client.chat.completions.create({
-            model: MODEL,
-            messages: [
-                { role: "system", content: systemInstruction },
-                { role: "user", content: userContent }
-            ]
-        });
+        const messages = [
+            { role: "system", content: systemInstruction },
+            { role: "user", content: userContent }
+        ];
+
+        const completion = await callOpenAI(client, messages);
 
         return completion.choices[0].message.content || "Análise não gerada.";
     } catch (error) {
@@ -200,11 +222,9 @@ export const parseScheduleCommand = async (command: string): Promise<any> => {
             - duration: (Number) Horas (ex: 1.5). Padrão 1.
         `;
 
-        const completion = await client.chat.completions.create({
-            model: MODEL,
-            messages: [{ role: "system", content: prompt }],
-            response_format: { type: "json_object" }
-        });
+        const messages = [{ role: "system", content: prompt }];
+
+        const completion = await callOpenAI(client, messages, { type: "json_object" });
 
         const content = completion.choices[0].message.content;
         if (!content) return null;
@@ -224,14 +244,12 @@ export const gradeEssay = async (topic: string, essay: string): Promise<any> => 
     }
 
     try {
-        const completion = await client.chat.completions.create({
-            model: MODEL,
-            messages: [
-                { role: "system", content: ESSAY_CORRECTION_SYSTEM_PROMPT },
-                { role: "user", content: buildEssayCorrectionPrompt(topic, essay) }
-            ],
-            response_format: { type: "json_object" }
-        });
+        const messages = [
+            { role: "system", content: ESSAY_CORRECTION_SYSTEM_PROMPT },
+            { role: "user", content: buildEssayCorrectionPrompt(topic, essay) }
+        ];
+
+        const completion = await callOpenAI(client, messages, { type: "json_object" });
 
         const content = completion.choices[0].message.content;
         if (!content) throw new Error("Empty response");
@@ -254,4 +272,3 @@ export const gradeEssay = async (topic: string, essay: string): Promise<any> => 
         return null;
     }
 };
-

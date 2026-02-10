@@ -122,16 +122,7 @@ export default function AssistantHub() {
                     );
 
                     if (isRestricted) {
-                        return (
-                            <PlanGuard
-                                key={persona.id}
-                                requiredPlan="pro"
-                                userPlan={userPlan}
-                                featureName={`Agent ${persona.name}`}
-                            >
-                                {CardContent}
-                            </PlanGuard>
-                        );
+                        return <div key={persona.id}>{CardContent}</div>;
                     }
 
                     return <div key={persona.id}>{CardContent}</div>;

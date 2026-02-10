@@ -127,6 +127,22 @@ export default function QuestionBank() {
         if (!selectedOption) return;
         setIsVerified(true);
         // AI is NOT triggered automatically anymore
+
+        // SAVE HISTORY
+        const userStr = localStorage.getItem('enem_pro_user');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            try {
+                await supabase.from('user_questions_history').insert({
+                    user_email: user.email,
+                    question_id: currentQuestion.id,
+                    is_correct: selectedOption === currentQuestion.answer,
+                    subject: currentQuestion.subject || currentQuestion.area || 'Geral'
+                });
+            } catch (e) {
+                console.error("Failed to save history", e);
+            }
+        }
     };
 
     const handleGenerateAI = async () => {
