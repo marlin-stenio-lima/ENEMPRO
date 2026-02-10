@@ -18,7 +18,7 @@ export default async (req: Request) => {
     }
 
     try {
-        const { messages, model, apiKey } = await req.json();
+        const { messages, model, apiKey, response_format } = await req.json();
 
         if (!apiKey) {
             return new Response(JSON.stringify({ error: 'Missing API Key' }), { status: 400, headers });
@@ -31,7 +31,7 @@ export default async (req: Request) => {
         const completion = await openai.chat.completions.create({
             model: model || "gpt-4o-mini",
             messages: messages,
-            response_format: { type: "json_object" }
+            response_format: response_format || undefined
         });
 
         return new Response(JSON.stringify(completion), { headers: { ...headers, 'Content-Type': 'application/json' } });

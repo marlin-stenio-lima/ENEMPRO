@@ -39,7 +39,8 @@ async function callOpenAI(client: OpenAI, messages: any[], responseFormat: any =
             body: JSON.stringify({
                 messages,
                 model: MODEL,
-                apiKey: apiKey
+                apiKey: apiKey,
+                response_format: responseFormat
             })
         });
 
