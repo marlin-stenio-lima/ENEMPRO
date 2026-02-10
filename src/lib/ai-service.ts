@@ -268,9 +268,11 @@ export const gradeEssay = async (topic: string, essay: string): Promise<any> => 
 
         return JSON.parse(content);
     } catch (error: any) {
-        console.error("OpenAI Essay Grading Error:", error);
-        // Add more detail for debugging
-        if (error.message) console.error("Error message:", error.message);
+        console.error("OpenAI Essay Grading Error FULL OBJECT:", error);
+        if (error.response) {
+            console.error("OpenAI Error Response Data:", error.response.data);
+            console.error("OpenAI Error Response Status:", error.response.status);
+        }
         return null;
     }
 };
