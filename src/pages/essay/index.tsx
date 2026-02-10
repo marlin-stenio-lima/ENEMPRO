@@ -7,6 +7,8 @@ import ExtraEssayModal from '../../components/ExtraEssayModal';
 import { supabase } from '../../lib/supabase';
 
 const PLAN_LIMITS = {
+    'semanal': 4,
+    'vitalicio': 999,
     'start': 2,
     'pro': 4,
     'advanced': 15
