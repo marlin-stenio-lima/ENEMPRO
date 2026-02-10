@@ -41,6 +41,7 @@ export default function Checkout() {
 
     const [billingId, setBillingId] = useState<string | null>(null);
     const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
+    const [copied, setCopied] = useState(false);
 
 
     const [showBumpModal, setShowBumpModal] = useState(false);
@@ -111,7 +112,10 @@ export default function Checkout() {
         const interval = setInterval(async () => {
             try {
                 const check = await AbacatePayService.checkPaymentStatus(billingId);
-                if (check.data?.status === 'PAID') {
+                console.log("Full Payment Check Response:", check);
+                // Check both standard and possible nested data structures
+                const status = check?.data?.status || check?.status;
+                if (status === 'PAID' || status === 'COMPLETED') {
                     clearInterval(interval);
 
                     import('../../lib/supabase').then(async ({ supabase }) => {
@@ -293,6 +297,11 @@ export default function Checkout() {
                                     <QRCodeSVG value={paymentUrl || 'error'} size={200} />
                                 </div>
 
+                                <div className="flex items-center gap-2 text-sm text-gray-500 mb-6 bg-gray-50 px-3 py-1.5 rounded-full animate-pulse">
+                                    <Loader2 className="h-3 w-3 animate-spin" />
+                                    Aguardando confirmação do pagamento...
+                                </div>
+
                                 <div className="w-full space-y-3">
                                     <div className="bg-gray-50 p-3 rounded-lg flex items-center justify-between gap-3 border border-gray-200">
                                         <code className="text-xs text-gray-600 truncate flex-1 font-mono">{paymentUrl}</code>
@@ -305,11 +314,15 @@ export default function Checkout() {
                                     </div>
 
                                     <button
-                                        className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
-                                        onClick={() => navigator.clipboard.writeText(paymentUrl || '')}
+                                        className={`w-full ${copied ? 'bg-green-600' : 'bg-green-500 hover:bg-green-600'} text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2`}
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(paymentUrl || '');
+                                            setCopied(true);
+                                            setTimeout(() => setCopied(false), 2000);
+                                        }}
                                     >
-                                        <Copy className="h-4 w-4" />
-                                        Copiar Código PIX
+                                        {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                                        {copied ? 'Copiado!' : 'Copiar Código PIX'}
                                     </button>
                                 </div>
                             </div>
@@ -325,6 +338,6 @@ export default function Checkout() {
                 </div>
 
             </div>
-        </div>
+        </div >
     );
 }

@@ -136,6 +136,8 @@ export class AbacatePayService {
     }
 
     static async checkPaymentStatus(pixId: string) {
-        return this.request(`/pixQrCode/check?id=${pixId}`);
+        const response = await this.request(`/pixQrCode/check?id=${pixId}`);
+        console.log("AbacatePay Raw Check Response:", response);
+        return response;
     }
 }
