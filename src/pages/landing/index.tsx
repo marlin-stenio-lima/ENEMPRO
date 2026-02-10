@@ -39,8 +39,8 @@ export default function LandingPage() {
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900 mb-6 max-w-5xl mx-auto leading-[1.1] animate-in fade-in slide-in-from-bottom-8 duration-700">
-                        Não estude mais sozinho. <br className="hidden md:block" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Sua Máquina de Aprovação com Inteligência Artificial.</span>
+                        Estude para o ENEM com Inteligência Artificial. <br className="hidden md:block" />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Sua Máquina de Aprovação.</span>
                     </h1>
 
                     <p className="text-lg md:text-xl text-gray-500 mb-10 max-w-3xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-12 duration-1000">
@@ -56,7 +56,6 @@ export default function LandingPage() {
                     </div>
 
                     <div className="mt-12 flex items-center justify-center gap-8 text-sm font-medium text-gray-400 animate-in fade-in duration-1000 delay-500">
-                        <div className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> Garantia de 7 dias</div>
                         <div className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> Acesso Imediato</div>
                         <div className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> Pagamento Seguro</div>
                     </div>
@@ -144,7 +143,7 @@ export default function LandingPage() {
             {/* Features Grid */}
             <section id="features" className="py-24 max-w-7xl mx-auto px-4">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Tudo o que você precisa em um só lugar.</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Tudo o que você precisa para o ENEM em um só lugar.</h2>
                     <p className="text-lg text-gray-500 max-w-2xl mx-auto">Esqueça os cursinhos tradicionais. Nossa metodologia foca no que realmente importa: sua evolução constante.</p>
                 </div>
 
@@ -194,7 +193,9 @@ export default function LandingPage() {
                             <div className="mx-auto max-w-[280px]">
                                 <img
                                     src="/testimonials/t2.jpg"
-                                    alt="Depoimento Rafaela"
+                                    alt="Rafaela aprovada no ENEM com 960 na redação usando Gabas IA"
+                                    width={280}
+                                    height={400}
                                     className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
                                     loading="lazy"
                                 />
@@ -210,7 +211,9 @@ export default function LandingPage() {
                             <div className="mx-auto max-w-[280px]">
                                 <img
                                     src="/testimonials/t4.jpg"
-                                    alt="Depoimento Beatriz"
+                                    alt="Beatriz aprovada em Medicina no ENEM usando Gabas"
+                                    width={280}
+                                    height={400}
                                     className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
                                     loading="lazy"
                                 />
@@ -222,7 +225,9 @@ export default function LandingPage() {
                             <div className="mx-auto max-w-[280px]">
                                 <img
                                     src="/testimonials/t3.jpg"
-                                    alt="Depoimento Ricardo"
+                                    alt="Ricardo obteve 800+ em Matemática no ENEM com Gabas"
+                                    width={280}
+                                    height={400}
                                     className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
                                     loading="lazy"
                                 />
@@ -234,7 +239,9 @@ export default function LandingPage() {
                             <div className="mx-auto max-w-[280px]">
                                 <img
                                     src="/testimonials/t5.jpg"
-                                    alt="Depoimento Fernando"
+                                    alt="Fernando gabaritou Natureza no ENEM com a plataforma Gabas"
+                                    width={280}
+                                    height={400}
                                     className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
                                     loading="lazy"
                                 />
@@ -250,7 +257,9 @@ export default function LandingPage() {
                             <div className="mx-auto max-w-[280px]">
                                 <img
                                     src="/testimonials/t1.jpg"
-                                    alt="Depoimento Diego"
+                                    alt="Diego evoluiu 150 pontos na média do ENEM"
+                                    width={280}
+                                    height={400}
                                     className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
                                     loading="lazy"
                                 />
@@ -320,7 +329,7 @@ export default function LandingPage() {
 
                         <div className="mt-6 pt-4 border-t border-gray-50 text-center">
                             <p className="text-[10px] text-gray-400">
-                                Pagamento Semanal • Cancela quando quiser
+                                Pagamento Semanal
                             </p>
                         </div>
                     </div>

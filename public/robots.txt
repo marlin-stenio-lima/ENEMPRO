@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gabas.com.br/sitemap.xml
