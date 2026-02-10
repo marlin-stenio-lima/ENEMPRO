@@ -140,7 +140,7 @@ Este conteúdo é frequente na prova de Ciências da Natureza/Matemática, cobra
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         const { PERSONA_PROMPTS } = await import('./prompts');
-        const systemInstruction = PERSONA_PROMPTS.video_analyst;
+        const systemInstruction = PERSONA_PROMPTS.video_analyst; // Accessed directly for type safety
 
         const fullPrompt = `${systemInstruction}\n\nVÍDEO PARA ANÁLISE:\nTítulo: ${videoTitle}\nCanal: ${channelTitle}`;
 
