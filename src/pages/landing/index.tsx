@@ -40,7 +40,7 @@ export default function LandingPage() {
 
                     <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900 mb-6 max-w-5xl mx-auto leading-[1.1] animate-in fade-in slide-in-from-bottom-8 duration-700">
                         Não estude mais sozinho. <br className="hidden md:block" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Tenha um time de especialistas em IA ao seu lado 24h.</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Sua Máquina de Aprovação com Inteligência Artificial.</span>
                     </h1>
 
                     <p className="text-lg md:text-xl text-gray-500 mb-10 max-w-3xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-12 duration-1000">
@@ -67,6 +67,75 @@ export default function LandingPage() {
                     <div className="absolute top-20 left-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
                     <div className="absolute top-20 right-10 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
                     <div className="absolute -bottom-32 left-1/3 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+                </div>
+            </section>
+
+            {/* Benefits vs Malefics Section */}
+            <section className="py-20 bg-gray-50 border-y border-gray-100">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Por que o Enem.Pro é diferente?</h2>
+                        <p className="text-lg text-gray-500 max-w-2xl mx-auto">Compare e veja por que milhares de alunos estão migrando para nossa plataforma.</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                        {/* The Old Way / Malefics */}
+                        <div className="bg-white p-8 rounded-3xl border border-gray-200 opacity-70 hover:opacity-100 transition-opacity">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center">
+                                    <span className="text-red-600 font-bold text-xl">✕</span>
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-700">Estudando Sozinho</h3>
+                            </div>
+                            <ul className="space-y-4">
+                                <li className="flex items-start gap-3 text-gray-500">
+                                    <span className="text-red-400 mt-1">✕</span>
+                                    <span>Perdido sem saber o que estudar primeiro</span>
+                                </li>
+                                <li className="flex items-start gap-3 text-gray-500">
+                                    <span className="text-red-400 mt-1">✕</span>
+                                    <span>Dúvidas acumuladas sem ninguém para ajudar</span>
+                                </li>
+                                <li className="flex items-start gap-3 text-gray-500">
+                                    <span className="text-red-400 mt-1">✕</span>
+                                    <span>Correção de redação demorada e genérica</span>
+                                </li>
+                                <li className="flex items-start gap-3 text-gray-500">
+                                    <span className="text-red-400 mt-1">✕</span>
+                                    <span>Procrastinação por falta de um plano claro</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* The New Way / Benefits */}
+                        <div className="bg-white p-8 rounded-3xl border-2 border-indigo-600 shadow-xl relative overflow-hidden transform md:scale-105">
+                            <div className="absolute top-0 right-0 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">RECOMENDADO</div>
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center">
+                                    <Check className="h-6 w-6 text-green-600" />
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-900">Com Enem.Pro</h3>
+                            </div>
+                            <ul className="space-y-4">
+                                <li className="flex items-start gap-3 text-gray-700 font-medium">
+                                    <Check className="h-5 w-5 text-green-500 mt-0.5" />
+                                    <span>Cronograma adaptativo que diz exatamente o que estudar</span>
+                                </li>
+                                <li className="flex items-start gap-3 text-gray-700 font-medium">
+                                    <Check className="h-5 w-5 text-green-500 mt-0.5" />
+                                    <span>Tutores IA 24h para tirar qualquer dúvida na hora</span>
+                                </li>
+                                <li className="flex items-start gap-3 text-gray-700 font-medium">
+                                    <Check className="h-5 w-5 text-green-500 mt-0.5" />
+                                    <span>Correção de redação instantânea e detalhada</span>
+                                </li>
+                                <li className="flex items-start gap-3 text-gray-700 font-medium">
+                                    <Check className="h-5 w-5 text-green-500 mt-0.5" />
+                                    <span>Foco total e evolução visível dia após dia</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </section>
 
