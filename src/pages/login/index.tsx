@@ -20,7 +20,7 @@ export default function Login() {
             const result = await login(email);
             if (result.success) {
                 // Check if admin to redirect correctly (optional, or just go to /app)
-                navigate('/app/dashboard');
+                navigate('/app');
             } else {
                 setError(result.message || 'Erro ao fazer login');
             }

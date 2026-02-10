@@ -215,7 +215,7 @@ export default function AdminDashboard() {
             <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
                     <div className="flex items-center gap-4">
-                        <button onClick={() => navigate('/app/dashboard')} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-600">
+                        <button onClick={() => navigate('/app')} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-600">
                             <ArrowLeft className="h-5 w-5" />
                         </button>
                         <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2">
