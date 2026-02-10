@@ -111,11 +111,6 @@ export default function DashboardHome() {
                     <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Olá, Estudante! 👋</h1>
                     <p className="text-gray-500 mt-2">Vamos conquistar sua aprovação hoje?</p>
                 </div>
-                <div className="hidden md:block">
-                    <button className="bg-black text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200">
-                        Começar Simulado Rápido
-                    </button>
-                </div>
             </div>
 
             {/* Stats Grid */}
