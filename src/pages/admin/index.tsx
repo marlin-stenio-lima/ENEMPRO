@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Users, DollarSign, Brain, Activity, Lock, Unlock, Search, ArrowLeft } from 'lucide-react';
+import { Users, DollarSign, Brain, Activity, Lock, Unlock, Search, ArrowLeft, Plus, X } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { format } from 'date-fns';
 
@@ -16,12 +16,11 @@ interface Lead {
     purchase_date: string;
     interaction_count?: number; // Mock or joined
 }
-
-const MOCK_LEADS: Lead[] = [
-    { id: '1', email: 'aluno1@email.com', name: 'João Silva', plan: 'pro', status: 'active', purchase_price: 129.90, purchase_date: '2024-02-01T10:00:00Z' },
-    { id: '2', email: 'aluno2@email.com', name: 'Maria Souza', plan: 'advanced', status: 'active', purchase_price: 199.90, purchase_date: '2024-02-02T14:30:00Z' },
-    { id: '3', email: 'caloteiro@email.com', name: 'Carlos Teste', plan: 'start', status: 'blocked', purchase_price: 49.90, purchase_date: '2024-01-25T09:15:00Z' },
-];
+const PLAN_PRICES: Record<string, number> = {
+    'start': 49.90,
+    'pro': 129.90,
+    'advanced': 199.90
+};
 
 export default function AdminDashboard() {
     const { user } = useAuth();
@@ -30,6 +29,15 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState<'all' | 'active' | 'blocked'>('all');
+
+    // Add User Modal State
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newUser, setNewUser] = useState({
+        name: '',
+        email: '',
+        plan: 'pro',
+        status: 'active' as const
+    });
 
     // Metrics
     const totalSales = leads.reduce((acc, lead) => acc + (lead.purchase_price || 0), 0);
@@ -52,17 +60,43 @@ export default function AdminDashboard() {
                 .select('*')
                 .order('created_at', { ascending: false });
 
-            if (error || !data || data.length === 0) {
-                // Determine if error is "table not found", use mock
-                console.warn("Using mock leads data due to DB error or empty", error);
-                setLeads(MOCK_LEADS);
+            if (error) {
+                console.error("Error fetching leads:", error);
+                // Don't use mock data on error anymore
+                setLeads([]);
             } else {
-                setLeads(data);
+                setLeads(data || []);
             }
         } catch (e) {
-            setLeads(MOCK_LEADS);
+            console.error("Critical fetch error:", e);
+            setLeads([]);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleCreateUser = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const { error } = await supabase.from('saas_leads').insert([
+                {
+                    name: newUser.name,
+                    email: newUser.email,
+                    plan: newUser.plan,
+                    status: newUser.status,
+                    purchase_date: new Date().toISOString(),
+                    purchase_price: PLAN_PRICES[newUser.plan] || 0
+                }
+            ]);
+
+            if (error) throw error;
+
+            setIsModalOpen(false);
+            setNewUser({ name: '', email: '', plan: 'pro', status: 'active' }); // Reset
+            fetchLeads(); // Refresh list to show new user
+        } catch (error) {
+            console.error('Error creating user:', error);
+            alert('Erro ao criar usuário. Verifique se o email já existe ou permissões.');
         }
     };
 
@@ -167,6 +201,13 @@ export default function AdminDashboard() {
                             <Activity className="h-6 w-6" /> Controle de Leads
                         </h2>
 
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="bg-black text-white px-4 py-2 text-sm font-bold uppercase hover:bg-gray-800 transition-colors flex items-center gap-2 shadow-[4px_4px_0px_0px_rgba(255,200,0,1)] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(255,200,0,1)] active:shadow-none active:translate-y-1"
+                        >
+                            <span className="text-xl leading-none">+</span> Adicionar Aluno
+                        </button>
+
                         <div className="flex gap-4 w-full md:w-auto">
                             <div className="relative flex-1 md:w-64">
                                 <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
@@ -259,6 +300,88 @@ export default function AdminDashboard() {
                     </div>
                 </div>
             </div>
+            {/* Add User Modal */}
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white max-w-md w-full border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-in fade-in zoom-in duration-300">
+                        <div className="flex justify-between items-center mb-6 border-b-2 border-gray-100 pb-2">
+                            <h3 className="text-xl font-black uppercase">Novo Aluno</h3>
+                            <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-red-500 transition-colors">
+                                <span className="text-2xl font-bold">×</span>
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleCreateUser} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold uppercase mb-1 text-gray-700">Nome Completo</label>
+                                <input
+                                    required
+                                    type="text"
+                                    className="w-full border-2 border-gray-200 p-2 text-sm font-bold focus:border-black focus:outline-none transition-colors"
+                                    value={newUser.name}
+                                    onChange={e => setNewUser({ ...newUser, name: e.target.value })}
+                                    placeholder="Ex: Ana Silva"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold uppercase mb-1 text-gray-700">Email (Login)</label>
+                                <input
+                                    required
+                                    type="email"
+                                    className="w-full border-2 border-gray-200 p-2 text-sm font-bold focus:border-black focus:outline-none transition-colors"
+                                    value={newUser.email}
+                                    onChange={e => setNewUser({ ...newUser, email: e.target.value })}
+                                    placeholder="ana@exemplo.com"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase mb-1 text-gray-700">Plano</label>
+                                    <select
+                                        className="w-full border-2 border-gray-200 p-2 text-sm font-bold focus:border-black focus:outline-none bg-white"
+                                        value={newUser.plan}
+                                        onChange={e => setNewUser({ ...newUser, plan: e.target.value })}
+                                    >
+                                        <option value="start">Start (R$ 49,90)</option>
+                                        <option value="pro">Pro (R$ 129,90)</option>
+                                        <option value="advanced">Advanced (R$ 199,90)</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold uppercase mb-1 text-gray-700">Status Inicial</label>
+                                    <select
+                                        className="w-full border-2 border-gray-200 p-2 text-sm font-bold focus:border-black focus:outline-none bg-white"
+                                        value={newUser.status}
+                                        onChange={e => setNewUser({ ...newUser, status: e.target.value as any })}
+                                    >
+                                        <option value="active">Ativo (Liberado)</option>
+                                        <option value="blocked">Bloqueado</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="pt-4 flex gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsModalOpen(false)}
+                                    className="flex-1 py-3 text-sm font-bold uppercase text-gray-500 hover:bg-gray-100 hover:text-black transition-colors"
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="flex-1 bg-black text-white py-3 text-sm font-bold uppercase hover:bg-gray-800 transition-colors shadow-[4px_4px_0px_0px_rgba(0,255,0,0.5)] active:translate-y-0.5 active:shadow-none"
+                                >
+                                    Criar Usuário
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
