@@ -118,6 +118,21 @@ export default function Checkout() {
                 if (status === 'PAID' || status === 'COMPLETED') {
                     clearInterval(interval);
 
+                    // Send Welcome Email
+                    fetch('/api/send-email', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            to: formData.email,
+                            subject: 'Acesso Liberado! 🚀',
+                            data: {
+                                name: formData.name,
+                                plan: PLANS[plan].name,
+                                link: window.location.origin + '/app'
+                            }
+                        })
+                    }).catch(err => console.error("Failed to send email:", err));
+
                     import('../../lib/supabase').then(async ({ supabase }) => {
                         await supabase.from('saas_leads').upsert({
                             email: formData.email,
