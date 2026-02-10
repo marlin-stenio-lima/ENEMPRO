@@ -3,16 +3,7 @@ import { PenTool, Send, Sparkles, BookOpen } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { generateEssayTopic, gradeEssay } from '../../lib/ai-service';
 import ChatInterface from '../assistant/ChatInterface';
-import ExtraEssayModal from '../../components/ExtraEssayModal';
 import { supabase } from '../../lib/supabase';
-
-const PLAN_LIMITS = {
-    'semanal': 4,
-    'vitalicio': 999,
-    'start': 2,
-    'pro': 4,
-    'advanced': 15
-};
 
 export default function EssayGrader() {
     const [essay, setEssay] = useState('');
@@ -21,38 +12,6 @@ export default function EssayGrader() {
     const [isGeneratingTopic, setIsGeneratingTopic] = useState(false);
     const [result, setResult] = useState<any>(null);
     const [showAssistant, setShowAssistant] = useState(false);
-    const [showExtraModal, setShowExtraModal] = useState(false);
-
-    // User State
-    const [userPlan, setUserPlan] = useState('start');
-    const [essaysUsed, setEssaysUsed] = useState(0);
-    const [extraBalance, setExtraBalance] = useState(0);
-
-    useEffect(() => {
-        fetchUserUsage();
-    }, []);
-
-    const fetchUserUsage = async () => {
-        try {
-            const userStr = localStorage.getItem('enem_pro_user');
-            if (!userStr) return;
-            const user = JSON.parse(userStr);
-            setUserPlan(user.plan || 'start');
-
-            const { data, error: _error } = await supabase
-                .from('saas_leads')
-                .select('essays_current_month, essays_extra_balance')
-                .eq('email', user.email)
-                .single();
-
-            if (data) {
-                setEssaysUsed(data.essays_current_month || 0);
-                setExtraBalance(data.essays_extra_balance || 0);
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    };
 
     const handleGenerateTopic = async () => {
         setIsGeneratingTopic(true);
@@ -62,30 +21,11 @@ export default function EssayGrader() {
     };
 
     const handleAnalyze = async () => {
-        // Limit Check
-        const limit = PLAN_LIMITS[userPlan as keyof typeof PLAN_LIMITS] || 2;
-        const hasPlanBalance = essaysUsed < limit;
-        const hasExtraBalance = extraBalance > 0;
-
-        if (!hasPlanBalance && !hasExtraBalance) {
-            setShowExtraModal(true);
-            return;
-        }
-
         setIsAnalyzing(true);
 
-        // Decrement logic (Simulated for frontend, ideally backend)
         try {
             const userStr = localStorage.getItem('enem_pro_user');
             const user = JSON.parse(userStr || '{}');
-
-            if (hasPlanBalance) {
-                await supabase.rpc('increment_essay_usage', { user_email: user.email });
-                setEssaysUsed(prev => prev + 1);
-            } else {
-                await supabase.rpc('decrement_extra_balance', { user_email: user.email });
-                setExtraBalance(prev => prev - 1);
-            }
 
             // Call AI Service
             const aiResult = await gradeEssay(topic, essay);
@@ -96,22 +36,25 @@ export default function EssayGrader() {
 
             setResult(aiResult);
 
-            // SAVE SUBMISSION
+            // SAVE SUBMISSION and Increment Usage (for stats only, no limit)
             try {
-                await supabase.from('essay_submissions').insert({
-                    user_email: user.email,
-                    topic: topic,
-                    essay_text: essay,
-                    score: aiResult.score,
-                    competencies_json: aiResult.competencies
-                });
+                await Promise.all([
+                    supabase.from('essay_submissions').insert({
+                        user_email: user.email,
+                        topic: topic,
+                        essay_text: essay,
+                        score: aiResult.score,
+                        competencies_json: aiResult.competencies
+                    }),
+                    supabase.rpc('increment_essay_usage', { user_email: user.email })
+                ]);
             } catch (saveError) {
                 console.error("Failed to save essay submission", saveError);
             }
 
         } catch (e) {
             console.error(e);
-            alert("Erro ao processar uso. Tente novamente.");
+            alert("Erro ao processar análise. Tente novamente.");
         } finally {
             setIsAnalyzing(false);
         }
@@ -119,15 +62,6 @@ export default function EssayGrader() {
 
     return (
         <div className="max-w-4xl mx-auto h-[calc(100vh-100px)] flex flex-col gap-6 font-sans pb-10 relative">
-            {showExtraModal && (
-                <ExtraEssayModal
-                    onClose={() => setShowExtraModal(false)}
-                    onSuccess={() => {
-                        fetchUserUsage(); // Refresh balance
-                        // Optionally auto-trigger analyze, but better let user click again
-                    }}
-                />
-            )}
             <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
                 <div className="flex flex-col md:flex-row gap-4 items-end">
                     <div className="flex-1 w-full space-y-2">
@@ -154,7 +88,6 @@ export default function EssayGrader() {
                         )}
                         {isGeneratingTopic ? "Gerando..." : "Gerar Tema IA"}
                     </button>
-                    {/* Assistant Button */}
                     <button
                         onClick={() => setShowAssistant(true)}
                         className="w-full md:w-auto px-6 py-3 bg-rose-50 text-rose-700 rounded-lg font-bold text-sm flex items-center justify-center gap-2 hover:bg-rose-100 transition-colors min-w-[160px]"
@@ -165,7 +98,6 @@ export default function EssayGrader() {
                 </div>
             </div>
 
-            {/* Writing Area */}
             <div className="flex-1 flex flex-col bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden relative min-h-[500px]">
                 <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                     <div className="flex items-center gap-2 text-gray-500">
@@ -203,7 +135,6 @@ export default function EssayGrader() {
                     </button>
                 </div>
 
-                {/* Result Overlay */}
                 {result && (
                     <div className="absolute inset-0 bg-white/95 backdrop-blur-sm z-20 overflow-y-auto p-8 animate-in fade-in duration-300">
                         <div className="max-w-2xl mx-auto space-y-8">
@@ -244,7 +175,6 @@ export default function EssayGrader() {
                 )}
             </div>
 
-            {/* Assistant Slide-over */}
             {showAssistant && (
                 <div className="absolute top-0 right-0 h-full w-full md:w-[450px] bg-white shadow-2xl z-30 flex flex-col border-l border-gray-200 animate-in slide-in-from-right duration-300">
                     <ChatInterface
