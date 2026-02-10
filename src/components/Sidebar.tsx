@@ -31,9 +31,9 @@ export default function Sidebar() {
             <div className="px-6 py-6 pb-2">
                 <div className="flex items-center gap-2 mb-6 cursor-pointer hover:opacity-80 transition-opacity">
                     <div className="h-6 w-6 bg-black text-white rounded-full flex items-center justify-center">
-                        <span className="text-[10px] font-bold">E</span>
+                        <span className="text-[10px] font-bold">G</span>
                     </div>
-                    <span className="font-semibold text-sm text-gray-900">ENEM Pro</span>
+                    <span className="font-semibold text-sm text-gray-900">Gabas</span>
                     <ChevronDown className="h-3 w-3 text-gray-400 ml-auto" />
                 </div>
 

@@ -14,7 +14,7 @@ export default function LandingPage() {
                         <div className="h-8 w-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                             <Brain className="h-5 w-5 text-white" />
                         </div>
-                        <span className="font-bold text-xl tracking-tight text-gray-900">Enem.Pro</span>
+                        <span className="font-bold text-xl tracking-tight text-gray-900">Gabas</span>
                     </div>
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-500">
                         <a href="#features" className="hover:text-indigo-600 transition-colors">Funcionalidades</a>
@@ -74,7 +74,7 @@ export default function LandingPage() {
             <section className="py-20 bg-gray-50 border-y border-gray-100">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Por que o Enem.Pro é diferente?</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Por que o Gabas é diferente?</h2>
                         <p className="text-lg text-gray-500 max-w-2xl mx-auto">Compare e veja por que milhares de alunos estão migrando para nossa plataforma.</p>
                     </div>
 
@@ -114,7 +114,7 @@ export default function LandingPage() {
                                 <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center">
                                     <Check className="h-6 w-6 text-green-600" />
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900">Com Enem.Pro</h3>
+                                <h3 className="text-xl font-bold text-gray-900">Com Gabas</h3>
                             </div>
                             <ul className="space-y-4">
                                 <li className="flex items-start gap-3 text-gray-700 font-medium">
@@ -190,7 +190,7 @@ export default function LandingPage() {
 
                     <div className="grid md:grid-cols-3 gap-6 items-start">
                         {/* Coluna Esquerda (Instagram - Rafaela) */}
-                        <div className="space-y-6">
+                        <div className="space-y-8">
                             <div className="mx-auto max-w-[280px]">
                                 <img
                                     src="/testimonials/t2.jpg"
@@ -198,11 +198,15 @@ export default function LandingPage() {
                                     className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
                                     loading="lazy"
                                 />
+                                <div className="mt-4 text-center">
+                                    <p className="font-bold text-gray-900">Rafaela</p>
+                                    <p className="text-sm text-indigo-600 font-bold">Saiu de 700 para 960 na Redação</p>
+                                </div>
                             </div>
                         </div>
 
                         {/* Coluna do Meio (WhatsApp - Beatriz, Ricardo, Fernando) */}
-                        <div className="space-y-6">
+                        <div className="space-y-8">
                             <div className="mx-auto max-w-[280px]">
                                 <img
                                     src="/testimonials/t4.jpg"
@@ -210,6 +214,10 @@ export default function LandingPage() {
                                     className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
                                     loading="lazy"
                                 />
+                                <div className="mt-4 text-center">
+                                    <p className="font-bold text-gray-900">Beatriz</p>
+                                    <p className="text-sm text-indigo-600 font-bold">Aprovada em Medicina</p>
+                                </div>
                             </div>
                             <div className="mx-auto max-w-[280px]">
                                 <img
@@ -218,6 +226,10 @@ export default function LandingPage() {
                                     className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
                                     loading="lazy"
                                 />
+                                <div className="mt-4 text-center">
+                                    <p className="font-bold text-gray-900">Ricardo</p>
+                                    <p className="text-sm text-indigo-600 font-bold">800+ em Matemática</p>
+                                </div>
                             </div>
                             <div className="mx-auto max-w-[280px]">
                                 <img
@@ -226,11 +238,15 @@ export default function LandingPage() {
                                     className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
                                     loading="lazy"
                                 />
+                                <div className="mt-4 text-center">
+                                    <p className="font-bold text-gray-900">Fernando</p>
+                                    <p className="text-sm text-indigo-600 font-bold">Gabaritou Natureza</p>
+                                </div>
                             </div>
                         </div>
 
                         {/* Coluna Direita (Instagram - Diego) */}
-                        <div className="space-y-6">
+                        <div className="space-y-8">
                             <div className="mx-auto max-w-[280px]">
                                 <img
                                     src="/testimonials/t1.jpg"
@@ -238,6 +254,10 @@ export default function LandingPage() {
                                     className="w-full h-auto rounded-[2rem] border-4 border-gray-900 shadow-2xl"
                                     loading="lazy"
                                 />
+                                <div className="mt-4 text-center">
+                                    <p className="font-bold text-gray-900">Diego</p>
+                                    <p className="text-sm text-indigo-600 font-bold">Evoluiu 150 pontos na Média</p>
+                                </div>
                             </div>
                         </div>
                     </div>
