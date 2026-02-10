@@ -3,3 +3,4 @@ Pillow
 supabase
 python-dotenv
 requests
+# Renomeado para evitar deploy Python no Vercel

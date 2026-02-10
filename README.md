@@ -73,3 +73,7 @@ export default defineConfig([
 ```
 
 <!-- Updated at 2026-02-09 to force deploy -->
+
+## Nota sobre Deploy (Vercel)
+O arquivo `requirements.txt` foi renomeado para `requirements.dev.txt` para evitar que a Vercel detecte o projeto como Python.
+Se precisar instalar dependências Python locais, use: `pip install -r requirements.dev.txt`
