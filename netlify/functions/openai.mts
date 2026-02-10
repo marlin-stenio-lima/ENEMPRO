@@ -1,6 +1,7 @@
 import OpenAI from 'openai';
 
-export default async (req: Request) => {
+// Standard Netlify Function Handler
+export const handler = async (event: any, context: any) => {
     // CORS Headers
     const headers = {
         'Access-Control-Allow-Origin': '*',
@@ -9,19 +10,39 @@ export default async (req: Request) => {
     };
 
     // Handle OPTIONS (Preflight)
-    if (req.method === 'OPTIONS') {
-        return new Response(null, { headers });
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 200,
+            headers,
+            body: ''
+        };
     }
 
-    if (req.method !== 'POST') {
-        return new Response('Method Not Allowed', { status: 405, headers });
+    if (event.httpMethod !== 'POST') {
+        return {
+            statusCode: 405,
+            headers,
+            body: 'Method Not Allowed'
+        };
     }
 
     try {
-        const { messages, model, apiKey, response_format } = await req.json();
+        if (!event.body) {
+            return {
+                statusCode: 400,
+                headers,
+                body: JSON.stringify({ error: 'Missing body' })
+            };
+        }
+
+        const { messages, model, apiKey, response_format } = JSON.parse(event.body);
 
         if (!apiKey) {
-            return new Response(JSON.stringify({ error: 'Missing API Key' }), { status: 400, headers });
+            return {
+                statusCode: 400,
+                headers,
+                body: JSON.stringify({ error: 'Missing API Key' })
+            };
         }
 
         const openai = new OpenAI({
@@ -34,10 +55,18 @@ export default async (req: Request) => {
             response_format: response_format || undefined
         });
 
-        return new Response(JSON.stringify(completion), { headers: { ...headers, 'Content-Type': 'application/json' } });
+        return {
+            statusCode: 200,
+            headers: { ...headers, 'Content-Type': 'application/json' },
+            body: JSON.stringify(completion)
+        };
 
     } catch (error: any) {
         console.error("OpenAI Proxy Error:", error);
-        return new Response(JSON.stringify({ error: error.message || 'Internal Server Error' }), { status: 500, headers });
+        return {
+            statusCode: 500,
+            headers,
+            body: JSON.stringify({ error: error.message || 'Internal Server Error' })
+        };
     }
 };
