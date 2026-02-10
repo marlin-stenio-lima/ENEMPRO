@@ -28,7 +28,7 @@ const MODEL = "gpt-4o-mini"; // Cost-effective, high intelligence
 async function callOpenAI(apiKey: string, messages: any[], responseFormat: any = null) {
     // PROXY LOGIC (Production)
     if (!import.meta.env.DEV) {
-        const response = await fetch('/.netlify/functions/openai', {
+        const response = await fetch('/api/openai', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
