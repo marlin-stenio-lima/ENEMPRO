@@ -58,7 +58,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                             <p>Sua assinatura foi confirmada com sucesso.</p>
                             <p>A partir de agora, você tem uma equipe de Tutores IA trabalhando 24h por dia para garantir sua aprovação.</p>
                             
-                            <a href="https://enem-pro.vercel.app/login" class="btn">ACESSAR PLATAFORMA AGORA</a>
+                            <a href="https://enemprogabas.vercel.app/login" class="btn">ACESSAR PLATAFORMA AGORA</a>
                             
                             <p style="font-size: 14px; color: #888;">
                                 Se precisar de qualquer ajuda, basta responder a este e-mail.<br>
