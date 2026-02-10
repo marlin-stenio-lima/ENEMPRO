@@ -26,9 +26,12 @@ function App() {
         <Route path="/thank-you" element={<ThankYou />} />
         <Route path="/renew" element={<RenewPage />} />
 
+        {/* Admin Route - Self Protected */}
+        <Route path="/admin" element={<AdminDashboard />} />
+
         {/* Protected Routes */}
         <Route element={<AccessGuard />}>
-          <Route path="/admin" element={<AdminDashboard />} />
+
 
           <Route path="/app" element={<Dashboard />}>
             <Route index element={<DashboardHome />} />
