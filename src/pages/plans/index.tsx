@@ -60,11 +60,7 @@ export default function PlansPage() {
                         )}
                     </div>
 
-                    {!isMedicina && (
-                        <button className="w-full mt-8 border-2 border-gray-200 text-gray-400 font-bold py-3 rounded-xl uppercase hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition-colors">
-                            Cancelar Assinatura
-                        </button>
-                    )}
+
                 </div>
 
                 {/* Upgrade Card (Only if not Medicina) */}
