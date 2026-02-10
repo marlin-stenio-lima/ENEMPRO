@@ -30,6 +30,12 @@ export default function AdminDashboard() {
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState<'all' | 'active' | 'blocked'>('all');
 
+    // Gatekeeper State
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [gatekeeperEmail, setGatekeeperEmail] = useState('');
+    const [gatekeeperPassword, setGatekeeperPassword] = useState('');
+    const [gatekeeperError, setGatekeeperError] = useState('');
+
     // Add User Modal State
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newUser, setNewUser] = useState({
@@ -45,16 +51,11 @@ export default function AdminDashboard() {
     const blockedUsers = leads.filter(l => l.status === 'blocked').length;
 
     useEffect(() => {
-        if (authLoading) return;
-
-        // Security Check
-        if (user?.role !== 'admin') {
-            navigate('/app/dashboard');
-            return;
+        // No auto-redirect here anymore, we rely on the Gatekeeper
+        if (isAuthenticated) {
+            fetchLeads();
         }
-
-        fetchLeads();
-    }, [user, authLoading]);
+    }, [isAuthenticated]);
 
     const fetchLeads = async () => {
         try {
@@ -127,6 +128,57 @@ export default function AdminDashboard() {
         return matchesSearch && matchesFilter;
     });
 
+    if (!isAuthenticated) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+                <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                    <div className="p-8 text-center border-b border-gray-50">
+                        <h1 className="text-2xl font-bold text-gray-900">Área Administrativa</h1>
+                        <p className="text-sm text-gray-500 mt-1">Acesso exclusivo para administradores</p>
+                    </div>
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        if (gatekeeperEmail === 'marlinstenio0312@gmail.com' && gatekeeperPassword === 'Senha@1234') {
+                            setIsAuthenticated(true);
+                            setGatekeeperError('');
+                        } else {
+                            setGatekeeperError('Credenciais inválidas.');
+                        }
+                    }} className="p-8 space-y-4">
+                        <div>
+                            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">Email</label>
+                            <input
+                                type="email"
+                                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all"
+                                value={gatekeeperEmail}
+                                onChange={e => setGatekeeperEmail(e.target.value)}
+                                placeholder="admin@gabas.com"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">Senha</label>
+                            <input
+                                type="password"
+                                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all"
+                                value={gatekeeperPassword}
+                                onChange={e => setGatekeeperPassword(e.target.value)}
+                                placeholder="••••••••"
+                            />
+                        </div>
+                        {gatekeeperError && (
+                            <div className="text-red-500 text-sm font-medium bg-red-50 p-3 rounded-lg flex items-center gap-2">
+                                <Lock className="h-4 w-4" /> {gatekeeperError}
+                            </div>
+                        )}
+                        <button type="submit" className="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm mt-2">
+                            Acessar Painel
+                        </button>
+                    </form>
+                </div>
+            </div>
+        );
+    }
+
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -138,15 +190,17 @@ export default function AdminDashboard() {
     return (
         <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
             {/* Navbar */}
-            <div className="bg-black text-white p-4 sticky top-0 z-10 border-b-4 border-yellow-400 shadow-md">
-                <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+                <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
                     <div className="flex items-center gap-4">
-                        <button onClick={() => navigate('/app/dashboard')} className="p-2 hover:bg-white/20 rounded-full transition-colors">
+                        <button onClick={() => navigate('/app/dashboard')} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-600">
                             <ArrowLeft className="h-5 w-5" />
                         </button>
-                        <h1 className="text-xl font-black uppercase tracking-wider">Admin<span className="text-yellow-400">Panel</span></h1>
+                        <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                            Gabas <span className="text-indigo-600 px-2 py-0.5 bg-indigo-50 rounded-full text-xs font-medium uppercase tracking-wide">Admin</span>
+                        </h1>
                     </div>
-                    <div className="text-xs font-mono bg-gray-800 px-3 py-1 rounded border border-gray-700">
+                    <div className="text-sm font-medium text-gray-600 bg-gray-50 px-4 py-1.5 rounded-full">
                         {user?.email}
                     </div>
                 </div>
@@ -156,134 +210,136 @@ export default function AdminDashboard() {
 
                 {/* Metrics Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div className="bg-white p-6 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center justify-between">
+                    <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
                         <div>
-                            <p className="text-xs font-bold text-gray-500 uppercase">Faturamento Total</p>
-                            <p className="text-2xl font-black text-green-600">R$ {totalSales.toFixed(2)}</p>
+                            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Faturamento Total</p>
+                            <p className="text-2xl font-bold text-gray-900 mt-1">R$ {totalSales.toFixed(2)}</p>
                         </div>
-                        <div className="bg-green-100 p-3 border-2 border-black">
-                            <DollarSign className="h-6 w-6 text-green-700" />
+                        <div className="bg-emerald-50 p-3 rounded-lg">
+                            <DollarSign className="h-6 w-6 text-emerald-600" />
                         </div>
                     </div>
 
-                    <div className="bg-white p-6 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center justify-between">
+                    <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
                         <div>
-                            <p className="text-xs font-bold text-gray-500 uppercase">Usuários Ativos</p>
-                            <p className="text-2xl font-black text-blue-600">{activeUsers}</p>
+                            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Usuários Ativos</p>
+                            <p className="text-2xl font-bold text-gray-900 mt-1">{activeUsers}</p>
                         </div>
-                        <div className="bg-blue-100 p-3 border-2 border-black">
-                            <Users className="h-6 w-6 text-blue-700" />
+                        <div className="bg-blue-50 p-3 rounded-lg">
+                            <Users className="h-6 w-6 text-blue-600" />
                         </div>
                     </div>
 
-                    <div className="bg-white p-6 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center justify-between">
+                    <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
                         <div>
-                            <p className="text-xs font-bold text-gray-500 uppercase">Bloqueados</p>
-                            <p className="text-2xl font-black text-red-600">{blockedUsers}</p>
+                            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Bloqueados</p>
+                            <p className="text-2xl font-bold text-gray-900 mt-1">{blockedUsers}</p>
                         </div>
-                        <div className="bg-red-100 p-3 border-2 border-black">
-                            <Lock className="h-6 w-6 text-red-700" />
+                        <div className="bg-rose-50 p-3 rounded-lg">
+                            <Lock className="h-6 w-6 text-rose-600" />
                         </div>
                     </div>
 
-                    <div className="bg-white p-6 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center justify-between">
+                    <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
                         <div>
-                            <p className="text-xs font-bold text-gray-500 uppercase">Uso de IA (Hoje)</p>
-                            <p className="text-2xl font-black text-purple-600">1,240</p>
+                            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Uso de IA (Hoje)</p>
+                            <p className="text-2xl font-bold text-gray-900 mt-1">1,240</p>
                         </div>
-                        <div className="bg-purple-100 p-3 border-2 border-black">
-                            <Brain className="h-6 w-6 text-purple-700" />
+                        <div className="bg-violet-50 p-3 rounded-lg">
+                            <Brain className="h-6 w-6 text-violet-600" />
                         </div>
                     </div>
                 </div>
 
                 {/* Main Content Area */}
-                <div className="bg-white border-4 border-black p-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,0.2)]">
+                <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
                     <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-                        <h2 className="text-2xl font-black uppercase flex items-center gap-2">
-                            <Activity className="h-6 w-6" /> Controle de Leads
+                        <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                            <Activity className="h-5 w-5 text-indigo-600" /> Controle de Leads
                         </h2>
 
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="bg-black text-white px-4 py-2 text-sm font-bold uppercase hover:bg-gray-800 transition-colors flex items-center gap-2 shadow-[4px_4px_0px_0px_rgba(255,200,0,1)] hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(255,200,0,1)] active:shadow-none active:translate-y-1"
+                            className="bg-indigo-600 text-white px-4 py-2 text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-sm hover:shadow-md"
                         >
-                            <span className="text-xl leading-none">+</span> Adicionar Aluno
+                            <Plus className="h-4 w-4" /> Adicionar Aluno
                         </button>
 
-                        <div className="flex gap-4 w-full md:w-auto">
+                        <div className="flex gap-4 w-full md:w-auto items-center">
                             <div className="relative flex-1 md:w-64">
-                                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                                <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                                 <input
                                     type="text"
                                     placeholder="Buscar por email ou nome..."
-                                    className="w-full bg-gray-50 border-2 border-black pl-10 pr-4 py-2.5 text-sm font-bold focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] outline-none transition-all"
+                                    className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2 text-sm focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 outline-none transition-all"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                 />
                             </div>
-                            <div className="flex bg-gray-100 border-2 border-black p-1 gap-1">
-                                <button onClick={() => setFilter('all')} className={cn("px-3 py-1.5 text-xs font-bold uppercase transition-all", filter === 'all' ? "bg-black text-white" : "text-gray-500 hover:text-black")}>Todos</button>
-                                <button onClick={() => setFilter('active')} className={cn("px-3 py-1.5 text-xs font-bold uppercase transition-all", filter === 'active' ? "bg-green-600 text-white" : "text-gray-500 hover:text-black")}>Ativos</button>
-                                <button onClick={() => setFilter('blocked')} className={cn("px-3 py-1.5 text-xs font-bold uppercase transition-all", filter === 'blocked' ? "bg-red-600 text-white" : "text-gray-500 hover:text-black")}>Blocks</button>
+                            <div className="flex bg-gray-100/50 p-1 rounded-lg gap-1">
+                                <button onClick={() => setFilter('all')} className={cn("px-3 py-1.5 text-xs font-medium rounded-md transition-all", filter === 'all' ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900")}>Todos</button>
+                                <button onClick={() => setFilter('active')} className={cn("px-3 py-1.5 text-xs font-medium rounded-md transition-all", filter === 'active' ? "bg-white text-green-600 shadow-sm" : "text-gray-500 hover:text-green-600")}>Ativos</button>
+                                <button onClick={() => setFilter('blocked')} className={cn("px-3 py-1.5 text-xs font-medium rounded-md transition-all", filter === 'blocked' ? "bg-white text-red-600 shadow-sm" : "text-gray-500 hover:text-red-600")}>Blocks</button>
                             </div>
                         </div>
                     </div>
 
                     <div className="overflow-x-auto">
                         <table className="w-full border-collapse">
-                            <thead>
-                                <tr className="bg-black text-white text-left uppercase text-xs tracking-wider border-b-4 border-black">
-                                    <th className="p-4 border-r border-gray-700">Aluno</th>
-                                    <th className="p-4 border-r border-gray-700">Plano</th>
-                                    <th className="p-4 border-r border-gray-700">Data Compra</th>
-                                    <th className="p-4 border-r border-gray-700">Valor</th>
-                                    <th className="p-4 border-r border-gray-700">Status</th>
-                                    <th className="p-4 text-center">Ação</th>
+                            <thead className="bg-gray-50/50">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Aluno</th>
+                                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Plano</th>
+                                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Data Compra</th>
+                                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Valor</th>
+                                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Ação</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y-2 divide-gray-100">
+                            <tbody className="bg-white divide-y divide-gray-100">
                                 {filteredLeads.map((lead) => (
-                                    <tr key={lead.id} className={cn("hover:bg-yellow-50 transition-colors font-medium border-b border-gray-100", lead.status === 'blocked' ? 'bg-red-50/50' : '')}>
-                                        <td className="p-4 border-r border-gray-100">
+                                    <tr key={lead.id} className="hover:bg-gray-50/50 transition-colors">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex flex-col">
-                                                <span className="font-bold text-gray-900">{lead.name || 'Sem Nome'}</span>
+                                                <span className="text-sm font-medium text-gray-900">{lead.name || 'Sem Nome'}</span>
                                                 <span className="text-xs text-gray-500">{lead.email}</span>
                                             </div>
                                         </td>
-                                        <td className="p-4 border-r border-gray-100">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={cn(
-                                                "px-2 py-1 rounded border-2 text-[10px] uppercase font-black tracking-wider",
-                                                lead.plan === 'pro' ? "bg-blue-100 text-blue-700 border-blue-200" :
-                                                    lead.plan === 'advanced' ? "bg-purple-100 text-purple-700 border-purple-200" :
-                                                        "bg-gray-100 text-gray-600 border-gray-200"
+                                                "px-2.5 py-0.5 rounded-full text-xs font-medium border",
+                                                lead.plan === 'pro' ? "bg-blue-50 text-blue-700 border-blue-100" :
+                                                    lead.plan === 'advanced' ? "bg-purple-50 text-purple-700 border-purple-100" :
+                                                        "bg-gray-50 text-gray-600 border-gray-100"
                                             )}>
-                                                {lead.plan}
+                                                {lead.plan === 'pro' ? 'Pro' : lead.plan === 'advanced' ? 'Advanced' : 'Start'}
                                             </span>
                                         </td>
-                                        <td className="p-4 border-r border-gray-100 text-sm text-gray-600">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {lead.purchase_date ? format(new Date(lead.purchase_date), 'dd/MM/yyyy') : '-'}
                                         </td>
-                                        <td className="p-4 border-r border-gray-100 text-gray-900 font-bold">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                             R$ {lead.purchase_price?.toFixed(2)}
                                         </td>
-                                        <td className="p-4 border-r border-gray-100">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             {lead.status === 'active' ? (
-                                                <span className="flex items-center gap-1.5 text-green-700 font-bold text-xs uppercase">
-                                                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" /> Ativo
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100">
+                                                    <div className="h-1.5 w-1.5 rounded-full bg-green-500" /> Ativo
                                                 </span>
                                             ) : (
-                                                <span className="flex items-center gap-1.5 text-red-700 font-bold text-xs uppercase">
-                                                    <div className="h-2 w-2 rounded-full bg-red-500" /> Bloqueado
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-100">
+                                                    <div className="h-1.5 w-1.5 rounded-full bg-red-500" /> Bloqueado
                                                 </span>
                                             )}
                                         </td>
-                                        <td className="p-4 text-center">
+                                        <td className="px-6 py-4 whitespace-nowrap text-center">
                                             <button
                                                 onClick={() => toggleStatus(lead.id, lead.status)}
                                                 className={cn(
-                                                    "p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:shadow-none transition-all",
-                                                    lead.status === 'active' ? "bg-red-100 text-red-700 hover:bg-red-200" : "bg-green-100 text-green-700 hover:bg-green-200"
+                                                    "p-1.5 rounded-lg transition-all border",
+                                                    lead.status === 'active'
+                                                        ? "text-red-600 hover:bg-red-50 border-transparent hover:border-red-100"
+                                                        : "text-green-600 hover:bg-green-50 border-transparent hover:border-green-100"
                                                 )}
                                                 title={lead.status === 'active' ? "Bloquear Acesso" : "Liberar Acesso"}
                                             >
