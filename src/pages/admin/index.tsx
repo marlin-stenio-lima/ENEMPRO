@@ -23,7 +23,7 @@ const PLAN_PRICES: Record<string, number> = {
 };
 
 export default function AdminDashboard() {
-    const { user, loading: authLoading } = useAuth();
+    const { user, login, loading: authLoading } = useAuth();
     const navigate = useNavigate();
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
@@ -136,11 +136,16 @@ export default function AdminDashboard() {
                         <h1 className="text-2xl font-bold text-gray-900">Área Administrativa</h1>
                         <p className="text-sm text-gray-500 mt-1">Acesso exclusivo para administradores</p>
                     </div>
-                    <form onSubmit={(e) => {
+                    <form onSubmit={async (e) => {
                         e.preventDefault();
                         if (gatekeeperEmail === 'marlinstenio0312@gmail.com' && gatekeeperPassword === 'Senha@1234') {
-                            setIsAuthenticated(true);
-                            setGatekeeperError('');
+                            const result = await login(gatekeeperEmail);
+                            if (result.success) {
+                                setIsAuthenticated(true);
+                                setGatekeeperError('');
+                            } else {
+                                setGatekeeperError(result.message || 'Erro ao conectar.');
+                            }
                         } else {
                             setGatekeeperError('Credenciais inválidas.');
                         }
