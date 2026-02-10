@@ -12,17 +12,14 @@ import {
     buildEssayCorrectionPrompt
 } from './prompts';
 
-// Helper to get client for specific agent
-const getClient = (agent: AgentType) => {
+// Helper to get API Key for specific agent
+const getClient = (agent: AgentType): string | null => {
     const apiKey = getApiKey(agent);
     if (!apiKey) {
         console.warn(`No API key found for agent: ${agent}`);
         return null;
     }
-    return new OpenAI({
-        apiKey: apiKey,
-        dangerouslyAllowBrowser: true
-    });
+    return apiKey;
 };
 
 const MODEL = "gpt-4o-mini"; // Cost-effective, high intelligence
