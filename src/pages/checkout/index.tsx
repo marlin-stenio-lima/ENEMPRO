@@ -123,13 +123,9 @@ export default function Checkout() {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            to: formData.email,
-                            subject: 'Acesso Liberado! 🚀',
-                            data: {
-                                name: formData.name,
-                                plan: PLANS[plan].name,
-                                link: window.location.origin + '/app'
-                            }
+                            email: formData.email,
+                            name: formData.name,
+                            plan: PLANS[plan].name
                         })
                     }).catch(err => console.error("Failed to send email:", err));
 

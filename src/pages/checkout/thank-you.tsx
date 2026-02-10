@@ -54,31 +54,32 @@ export default function ThankYou() {
     }, [location]);
 
     return (
-        <div className="min-h-screen bg-green-50 flex items-center justify-center p-4 font-sans">
-            <div className="w-full max-w-md bg-white border-4 border-green-600 shadow-[8px_8px_0px_0px_rgba(22,163,74,1)] p-8 text-center animate-in fade-in zoom-in-95">
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
+            <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-100 p-8 text-center animate-in fade-in zoom-in duration-500">
 
-                <div className="flex justify-center mb-6">
-                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center border-4 border-green-600">
-                        <CheckCircle className="h-10 w-10 text-green-600" />
+                <div className="flex justify-center mb-8">
+                    <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-2 animate-bounce">
+                        <CheckCircle className="h-12 w-12 text-green-500" />
                     </div>
                 </div>
 
-                <h1 className="text-3xl font-black uppercase text-gray-900 mb-2">Pagamento Confirmado!</h1>
-                <p className="text-gray-600 font-medium mb-8">
-                    Parabéns! Sua assinatura foi ativada com sucesso. Você já pode acessar todo o conteúdo exclusivo da plataforma.
+                <h1 className="text-3xl font-extrabold text-gray-900 mb-3 tracking-tight">Pagamento Confirmado!</h1>
+                <p className="text-gray-500 text-lg mb-8 leading-relaxed">
+                    Parabéns! Sua assinatura foi ativada. <br />
+                    Tudo pronto para sua aprovação.
                 </p>
 
                 <div className="space-y-4">
                     <button
                         onClick={() => navigate('/login')}
-                        className="w-full bg-black text-white font-black uppercase tracking-wider p-4 border-2 border-transparent hover:bg-white hover:text-black hover:border-black hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-2 group"
+                        className="w-full bg-black text-white font-bold text-lg py-4 rounded-xl hover:bg-gray-800 hover:scale-[1.02] transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                     >
                         Acessar Plataforma
-                        <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="h-5 w-5" />
                     </button>
 
-                    <p className="text-xs text-gray-400">
-                        As instruções de acesso também foram enviadas para seu e-mail.
+                    <p className="text-sm text-gray-400">
+                        Enviamos os dados de acesso para seu e-mail.
                     </p>
                 </div>
             </div>

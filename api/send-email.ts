@@ -55,10 +55,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                         <div class="content">
                             <h1>Bem-vindo ao Elite! 🚀</h1>
                             <p>Olá, <strong>${name || 'Estudante'}</strong>!</p>
-                            <p>Sua assinatura do <span class="highlight">Plano ${plan || 'Pro'}</span> foi confirmada com sucesso.</p>
+                            <p>Sua assinatura foi confirmada com sucesso.</p>
                             <p>A partir de agora, você tem uma equipe de Tutores IA trabalhando 24h por dia para garantir sua aprovação.</p>
                             
-                            <a href="https://enem-pro.vercel.app/app" class="btn">ACESSAR PLATAFORMA AGORA</a>
+                            <a href="https://enem-pro.vercel.app/login" class="btn">ACESSAR PLATAFORMA AGORA</a>
                             
                             <p style="font-size: 14px; color: #888;">
                                 Se precisar de qualquer ajuda, basta responder a este e-mail.<br>
