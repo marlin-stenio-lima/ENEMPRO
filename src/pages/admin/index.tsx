@@ -23,7 +23,7 @@ const PLAN_PRICES: Record<string, number> = {
 };
 
 export default function AdminDashboard() {
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const navigate = useNavigate();
     const [leads, setLeads] = useState<Lead[]>([]);
     const [loading, setLoading] = useState(true);
@@ -45,13 +45,16 @@ export default function AdminDashboard() {
     const blockedUsers = leads.filter(l => l.status === 'blocked').length;
 
     useEffect(() => {
+        if (authLoading) return;
+
         // Security Check
         if (user?.role !== 'admin') {
             navigate('/app/dashboard');
+            return;
         }
 
         fetchLeads();
-    }, [user]);
+    }, [user, authLoading]);
 
     const fetchLeads = async () => {
         try {
