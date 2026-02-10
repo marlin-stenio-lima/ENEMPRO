@@ -91,7 +91,7 @@ export default function Login() {
 
                 {/* Footer */}
                 <div className="mt-8 text-center">
-                    <a href="#" className="text-xs font-medium text-gray-400 hover:text-indigo-600 transition-colors">Precisa de Ajuda?</a>
+
                 </div>
             </div>
         </div>
