@@ -458,6 +458,19 @@ export default function AdminDashboard() {
                                 </div>
                             </div>
 
+                            <div>
+                                <label className="block text-xs font-bold uppercase mb-1 text-gray-700">Valor (R$)</label>
+                                <input
+                                    required
+                                    type="number"
+                                    step="0.01"
+                                    className="w-full border-2 border-gray-200 p-2 text-sm font-bold focus:border-black focus:outline-none transition-colors"
+                                    value={newUser.customPrice}
+                                    onChange={e => setNewUser({ ...newUser, customPrice: parseFloat(e.target.value) })}
+                                    placeholder="0.00"
+                                />
+                            </div>
+
                             <div className="pt-4 flex gap-3">
                                 <button
                                     type="button"
