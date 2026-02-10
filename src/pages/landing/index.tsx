@@ -39,17 +39,16 @@ export default function LandingPage() {
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900 mb-6 max-w-5xl mx-auto leading-[1.1] animate-in fade-in slide-in-from-bottom-8 duration-700">
-                        Estude para o ENEM com Inteligência Artificial. <br className="hidden md:block" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Sua Máquina de Aprovação.</span>
+                        Cansado de estudar para o ENEM e sentir que <span className="text-red-600">não sai do lugar?</span>
                     </h1>
 
                     <p className="text-lg md:text-xl text-gray-500 mb-10 max-w-3xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-12 duration-1000">
-                        Diferente de cursos gravados onde você fica com a dúvida, aqui a nossa IA entende sua dificuldade específica em Física ou Redação e te explica até você aprender.
+                        A sensação de ver seus amigos evoluindo enquanto você trava na mesma matéria acaba hoje. O Gabas transforma sua insegurança em aprovação.
                     </p>
 
                     <div className="flex flex-col md:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-16 duration-1000">
                         <button onClick={() => navigate('/checkout')} className="w-full md:w-auto bg-indigo-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-200 hover:shadow-2xl hover:-translate-y-1 flex items-center justify-center gap-2">
-                            Quero ser Aprovado
+                            Quero Acabar com Minha Insegurança
                             <ArrowRight className="h-5 w-5" />
                         </button>
 
@@ -89,19 +88,19 @@ export default function LandingPage() {
                             <ul className="space-y-4">
                                 <li className="flex items-start gap-3 text-gray-500">
                                     <span className="text-red-400 mt-1">✕</span>
-                                    <span>Perdido sem saber o que estudar primeiro</span>
+                                    <span>A angústia de acordar e não saber por onde começar</span>
                                 </li>
                                 <li className="flex items-start gap-3 text-gray-500">
                                     <span className="text-red-400 mt-1">✕</span>
-                                    <span>Dúvidas acumuladas sem ninguém para ajudar</span>
+                                    <span>Travar numa matéria e pensar em desistir porque ninguém ajuda</span>
                                 </li>
                                 <li className="flex items-start gap-3 text-gray-500">
                                     <span className="text-red-400 mt-1">✕</span>
-                                    <span>Correção de redação demorada e genérica</span>
+                                    <span>Esperar semanas por uma correção e continuar com os mesmos erros</span>
                                 </li>
                                 <li className="flex items-start gap-3 text-gray-500">
                                     <span className="text-red-400 mt-1">✕</span>
-                                    <span>Procrastinação por falta de um plano claro</span>
+                                    <span>Ver seus concorrentes evoluindo enquanto você procrastina</span>
                                 </li>
                             </ul>
                         </div>
@@ -118,19 +117,19 @@ export default function LandingPage() {
                             <ul className="space-y-4">
                                 <li className="flex items-start gap-3 text-gray-700 font-medium">
                                     <Check className="h-5 w-5 text-green-500 mt-0.5" />
-                                    <span>Cronograma adaptativo que diz exatamente o que estudar</span>
+                                    <span>A certeza de estar estudando exatamente o que cai na prova</span>
                                 </li>
                                 <li className="flex items-start gap-3 text-gray-700 font-medium">
                                     <Check className="h-5 w-5 text-green-500 mt-0.5" />
-                                    <span>Tutores IA 24h para tirar qualquer dúvida na hora</span>
+                                    <span>Alívio imediato: tire suas dúvidas em segundos, 24h por dia</span>
                                 </li>
                                 <li className="flex items-start gap-3 text-gray-700 font-medium">
                                     <Check className="h-5 w-5 text-green-500 mt-0.5" />
-                                    <span>Correção de redação instantânea e detalhada</span>
+                                    <span>Sua redação corrigida na hora: saiba como tirar 900+ hoje</span>
                                 </li>
                                 <li className="flex items-start gap-3 text-gray-700 font-medium">
                                     <Check className="h-5 w-5 text-green-500 mt-0.5" />
-                                    <span>Foco total e evolução visível dia após dia</span>
+                                    <span>Durma tranquilo sabendo que está cada dia mais perto da vaga</span>
                                 </li>
                             </ul>
                         </div>
@@ -309,7 +308,7 @@ export default function LandingPage() {
                             onClick={() => navigate('/checkout?plan=start')}
                             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-lg font-bold py-4 rounded-xl shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-1 active:translate-y-0 uppercase tracking-wide mb-6 flex items-center justify-center gap-2"
                         >
-                            Quero Acesso Imediato
+                            Quero Garantir Minha Vaga
                         </button>
 
                         <div className="flex items-center justify-center gap-4 text-xs font-bold text-gray-400 mb-6 uppercase tracking-wider">
