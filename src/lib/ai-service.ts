@@ -45,7 +45,10 @@ async function callOpenAI(client: OpenAI, messages: any[], responseFormat: any =
         });
 
         const data = await response.json();
-        if (data.error) throw new Error(data.error);
+        if (data.error) {
+            console.error("Proxy OpenAI Error Details:", data.error);
+            throw new Error(data.error);
+        }
         return data; // Returns the full completion object
     }
 
@@ -268,8 +271,10 @@ export const gradeEssay = async (topic: string, essay: string): Promise<any> => 
         }
 
         return JSON.parse(content);
-    } catch (error) {
+    } catch (error: any) {
         console.error("OpenAI Essay Grading Error:", error);
+        // Add more detail for debugging
+        if (error.message) console.error("Error message:", error.message);
         return null;
     }
 };
