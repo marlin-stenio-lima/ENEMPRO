@@ -38,7 +38,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                         body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f5; }
                         .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
                         .header { background-color: #000000; padding: 40px; text-align: center; }
-                        .logo { color: #ffffff; font-size: 24px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase; display: flex; justify-content: center; align-items: center; }
+                        .logo { color: #ffffff; font-size: 24px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase; }
                         .content { padding: 40px; color: #333333; line-height: 1.6; }
                         h1 { margin: 0 0 20px; font-size: 28px; font-weight: 800; color: #111111; }
                         p { margin: 0 0 20px; font-size: 16px; color: #555555; }
@@ -50,13 +50,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 <body>
                     <div class="container">
                         <div class="header">
-                            <div class="logo">
-                                <!-- Brain Icon SVG -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
-                                    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
-                                </svg>
-                            </div>
+                            <div class="logo">GABAS</div>
                         </div>
                         <div class="content">
                             <h1>Bem-vindo ao Elite! 🚀</h1>
