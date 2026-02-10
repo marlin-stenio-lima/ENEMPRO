@@ -11,10 +11,11 @@ export default function ThankYou() {
         if (sentRef.current) return;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const state = location.state as { purchase_price?: number, plan_name?: string, transaction_id?: string } | null;
+        const state = location.state as { purchase_price?: number, plan_name?: string, transaction_id?: string, user_email?: string, user_name?: string } | null;
         const value = state?.purchase_price || 9.90; // Fallback to 9.90
         const transaction_id = state?.transaction_id || `txn_${Date.now()}`;
 
+        // 1. Send Pixel Event
         if (window.gtag) {
             window.gtag('event', 'purchase', {
                 transaction_id: transaction_id,
@@ -26,8 +27,30 @@ export default function ThankYou() {
                 }]
             });
             console.log('Pixel Purchase Sent:', { value, transaction_id });
-            sentRef.current = true;
         }
+
+        // 2. Send Welcome Email (via Serverless Function)
+        const userStr = localStorage.getItem('enem_pro_user');
+        const user = userStr ? JSON.parse(userStr) : null;
+        const email = state?.user_email || user?.email;
+        const name = state?.user_name || user?.name;
+
+        if (email) {
+            fetch('/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email,
+                    name,
+                    plan: state?.plan_name || 'Semanal'
+                })
+            }).then(res => {
+                if (res.ok) console.log("Email sent successfully");
+                else console.error("Failed to send email");
+            }).catch(err => console.error("Email API Error:", err));
+        }
+
+        sentRef.current = true;
     }, [location]);
 
     return (
