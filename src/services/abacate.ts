@@ -9,52 +9,35 @@ const API_KEYS = [
 const BASE_URL = "https://api.abacatepay.com/v1";
 
 export class AbacatePayService {
-    private static async request(endpoint: string, options: RequestInit = {}) {
-        let lastError;
+    private static async request(endpoint: string, options: any = {}) {
+        try {
+            console.log(`AbacatePay: Calling proxy for ${endpoint}`);
 
-        // Fallback if no keys defined (dev mode)
-        if (API_KEYS.length === 0) {
-            console.warn("No Abacate Pay Keys found. Check your .env file for VITE_ABACATE_KEY_1, etc.");
-            throw new Error("Missing Abacate Pay API Keys");
-        }
+            const response = await fetch('/api/abacate-proxy', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    endpoint,
+                    method: options.method || 'GET',
+                    body: options.body ? JSON.parse(options.body) : undefined
+                }),
+            });
 
-        for (const apiKey of API_KEYS) {
-            try {
-                const url = `${BASE_URL}${endpoint}`;
-                console.log(`AbacatePay: Calling ${url} with key ending in ...${apiKey.slice(-4)}`);
-
-                const response = await fetch(url, {
-                    ...options,
-                    headers: {
-                        ...options.headers,
-                        'Authorization': `Bearer ${apiKey}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error("AbacatePay API Error Response:", {
-                        status: response.status,
-                        statusText: response.statusText,
-                        body: errorText,
-                        endpoint
-                    });
-                    throw new Error(`AbacatePay Error (${response.status}): ${errorText}`);
-                }
-
-                const result = await response.json();
-                console.log("AbacatePay Success Response:", result);
-                return result;
-            } catch (error: any) {
-                console.warn(`AbacatePay attempt failed for key ending in ...${apiKey.slice(-4)}. Error:`, error.message);
-                lastError = error;
-                continue;
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("AbacatePay Proxy Error:", errorData);
+                throw new Error(errorData.error || `Proxy Error (${response.status})`);
             }
-        }
 
-        console.error("AbacatePay: All API keys exhausted or network error.", lastError);
-        throw lastError || new Error(`All AbacatePay API keys failed.`);
+            const result = await response.json();
+            console.log("AbacatePay Proxy Success:", result);
+            return result;
+        } catch (error: any) {
+            console.error("AbacatePay Service Error:", error.message);
+            throw error;
+        }
     }
 
     static async createBilling(data: {
