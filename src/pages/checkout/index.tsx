@@ -44,7 +44,6 @@ export default function Checkout() {
     const [copied, setCopied] = useState(false);
 
 
-    const [showBumpModal, setShowBumpModal] = useState(false);
 
     const createCharge = async (selectedPlan: keyof typeof PLANS) => {
         setLoading(true);
@@ -86,25 +85,9 @@ export default function Checkout() {
 
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        // Order Bump Logic: If user is on 'start' plan, show modal first
-        if (plan === 'start') {
-            setShowBumpModal(true);
-        } else {
-            createCharge(plan);
-        }
+        createCharge(plan);
     };
 
-    const handleAcceptBump = () => {
-        setPlan('medicina');
-        setShowBumpModal(false);
-        createCharge('medicina');
-    };
-
-    const handleDeclineBump = () => {
-        setShowBumpModal(false);
-        createCharge('start');
-    };
 
     useEffect(() => {
         if (step !== 'payment' || !billingId) return;
@@ -162,50 +145,6 @@ export default function Checkout() {
     return (
         <div className="min-h-screen bg-[#f0f2f5] font-sans text-gray-900 flex flex-col items-center justify-center py-12 px-4 relative">
 
-            {/* Order Bump Modal - Kept functional but softened style */}
-            {showBumpModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-                    <div className="bg-white max-w-md w-full rounded-xl shadow-2xl p-6 relative animate-in zoom-in-95 duration-300">
-                        <button onClick={() => setShowBumpModal(false)} className="absolute top-2 right-2 p-2 rounded-full hover:bg-gray-100"><X className="h-5 w-5 text-gray-500" /></button>
-
-                        <div className="flex items-center gap-2 text-yellow-600 mb-4 uppercase font-bold text-xs tracking-wider">
-                            <AlertTriangle className="h-4 w-4" />
-                            Espere um segundo!
-                        </div>
-
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                            Não pague mensalidade <span className="text-red-500 line-through">nunca mais</span>.
-                        </h3>
-
-                        <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-                            Você escolheu o <strong className="text-gray-900">Plano Enem Pro</strong> por <strong className="text-gray-900">R$ 9,90</strong>. Mas por apenas uma única vez de <strong className="text-green-600 text-lg">R$ 98,90</strong>, você libera o acesso <strong>VITALÍCIO</strong> ao Enem Pro Medicina.
-                        </p>
-
-                        <div className="bg-yellow-50 rounded-lg p-4 mb-6 space-y-2 border border-yellow-100">
-                            <div className="flex items-center gap-2 font-medium text-sm text-gray-800"><Check className="h-4 w-4 text-green-600" /> Acesso Vitalício (Sem renovação)</div>
-                            <div className="flex items-center gap-2 font-medium text-sm text-gray-800"><Check className="h-4 w-4 text-green-600" /> Economia de R$ 400/ano</div>
-                            <div className="flex items-center gap-2 font-medium text-sm text-gray-800"><Check className="h-4 w-4 text-green-600" /> Foco em Medicina</div>
-                        </div>
-
-                        <div className="space-y-3">
-                            <button
-                                type="button"
-                                onClick={handleAcceptBump}
-                                className="w-full bg-green-600 text-white font-bold uppercase py-3 rounded-lg hover:bg-green-700 transition-all shadow-md flex items-center justify-center gap-2"
-                            >
-                                Sim, Quero Vitalício
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleDeclineBump}
-                                className="w-full bg-transparent text-gray-500 font-medium py-2 hover:text-gray-700 text-xs transition-colors"
-                            >
-                                Não, vou continuar no plano atual
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             <div className="w-full max-w-lg relative z-0">
                 {/* Product Summary Card */}

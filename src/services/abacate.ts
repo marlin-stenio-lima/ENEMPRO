@@ -14,13 +14,16 @@ export class AbacatePayService {
 
         // Fallback if no keys defined (dev mode)
         if (API_KEYS.length === 0) {
-            console.warn("No Abacate Pay Keys found. Using Mock.");
-            throw new Error("Missing API Keys");
+            console.warn("No Abacate Pay Keys found. Check your .env file for VITE_ABACATE_KEY_1, etc.");
+            throw new Error("Missing Abacate Pay API Keys");
         }
 
         for (const apiKey of API_KEYS) {
             try {
-                const response = await fetch(`${BASE_URL}${endpoint}`, {
+                const url = `${BASE_URL}${endpoint}`;
+                console.log(`AbacatePay: Calling ${url} with key ending in ...${apiKey.slice(-4)}`);
+
+                const response = await fetch(url, {
                     ...options,
                     headers: {
                         ...options.headers,
@@ -31,18 +34,26 @@ export class AbacatePayService {
 
                 if (!response.ok) {
                     const errorText = await response.text();
-                    console.error("AbacatePay Response Error:", errorText);
-                    throw new Error(`Request failed with status ${response.status}: ${errorText}`);
+                    console.error("AbacatePay API Error Response:", {
+                        status: response.status,
+                        statusText: response.statusText,
+                        body: errorText,
+                        endpoint
+                    });
+                    throw new Error(`AbacatePay Error (${response.status}): ${errorText}`);
                 }
 
-                return await response.json();
-            } catch (error) {
-                console.warn(`AbacatePay request failed with key ending in ...${apiKey.slice(-4)}. Error:`, error);
+                const result = await response.json();
+                console.log("AbacatePay Success Response:", result);
+                return result;
+            } catch (error: any) {
+                console.warn(`AbacatePay attempt failed for key ending in ...${apiKey.slice(-4)}. Error:`, error.message);
                 lastError = error;
                 continue;
             }
         }
 
+        console.error("AbacatePay: All API keys exhausted or network error.", lastError);
         throw lastError || new Error(`All AbacatePay API keys failed.`);
     }
 
@@ -52,7 +63,10 @@ export class AbacatePayService {
         description: string;
     }) {
         // Sanitize
-        const cleanPhone = data.customer.cellphone.replace(/\D/g, '');
+        let cleanPhone = data.customer.cellphone.replace(/\D/g, '');
+        if (cleanPhone.length === 11 || cleanPhone.length === 10) {
+            cleanPhone = '55' + cleanPhone;
+        }
         const cleanTaxId = data.customer.taxId.replace(/\D/g, '');
 
         const payload = {
@@ -81,6 +95,8 @@ export class AbacatePayService {
             }
         };
 
+        console.log("AbacatePay: Creating Billing with payload:", payload);
+
         return this.request('/billing/create', {
             method: 'POST',
             body: JSON.stringify(payload)
@@ -92,7 +108,10 @@ export class AbacatePayService {
         amount: number; // in cents
         description: string;
     }) {
-        const cleanPhone = data.customer.cellphone.replace(/\D/g, '');
+        let cleanPhone = data.customer.cellphone.replace(/\D/g, '');
+        if (cleanPhone.length === 11 || cleanPhone.length === 10) {
+            cleanPhone = '55' + cleanPhone;
+        }
         const cleanTaxId = data.customer.taxId.replace(/\D/g, '');
 
         const payload = {
@@ -111,7 +130,7 @@ export class AbacatePayService {
         };
 
         // Debug log
-        console.log("Creating PIX charge with payload:", payload);
+        console.log("AbacatePay: Creating PIX charge with payload:", payload);
 
         return this.request('/pixQrCode/create', {
             method: 'POST',
