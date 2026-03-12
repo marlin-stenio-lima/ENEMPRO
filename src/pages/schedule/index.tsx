@@ -28,6 +28,7 @@ const INITIAL_EVENTS = [
 
 export default function StudySchedule() {
     const [currentDate, setCurrentDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [events, setEvents] = useState(INITIAL_EVENTS);
 
     // UI States
@@ -50,7 +51,11 @@ export default function StudySchedule() {
 
     const nextWeek = () => setCurrentDate(addWeeks(currentDate, 1));
     const prevWeek = () => setCurrentDate(subWeeks(currentDate, 1));
-    const today = () => setCurrentDate(new Date());
+    const today = () => {
+        const now = new Date();
+        setCurrentDate(now);
+        setSelectedDate(now);
+    };
 
     // Helper to position events
     const getEventStyle = (event: any) => {
@@ -108,27 +113,27 @@ export default function StudySchedule() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto h-[calc(100vh-100px)] flex flex-col font-sans bg-white rounded-3xl shadow-xl overflow-hidden relative border border-gray-100">
+        <div className="max-w-7xl mx-auto h-[calc(100vh-100px)] lg:h-[calc(100vh-100px)] flex flex-col font-sans bg-white lg:rounded-3xl shadow-xl overflow-hidden relative border-x lg:border border-gray-100">
             {/* Header */}
-            <div className="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 bg-white">
-                <div className="flex items-center gap-6">
-                    <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                        <div className="bg-indigo-50 p-2 rounded-xl">
-                            <CalendarIcon className="h-6 w-6 text-indigo-600" />
+            <div className="p-4 lg:p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-white sticky top-0 z-30">
+                <div className="flex items-center gap-4 lg:gap-6 w-full sm:w-auto overflow-x-auto no-scrollbar">
+                    <h1 className="text-lg lg:text-2xl font-bold text-gray-900 flex items-center gap-2 lg:gap-3 flex-shrink-0">
+                        <div className="bg-indigo-50 p-1.5 lg:p-2 rounded-xl">
+                            <CalendarIcon className="h-5 w-5 lg:h-6 lg:w-6 text-indigo-600" />
                         </div>
-                        <span className="capitalize">{format(currentDate, 'MMMM yyyy', { locale: ptBR })}</span>
+                        <span className="capitalize whitespace-nowrap">{format(currentDate, 'MMMM yyyy', { locale: ptBR })}</span>
                     </h1>
-                    <div className="flex items-center gap-2 bg-gray-50 p-1 rounded-xl">
-                        <button onClick={prevWeek} className="p-2 text-gray-500 hover:bg-white hover:text-indigo-600 rounded-lg transition-all shadow-sm"><ChevronLeft className="h-4 w-4" /></button>
-                        <button onClick={today} className="px-4 py-2 text-xs font-bold uppercase tracking-wide text-gray-600 hover:bg-white hover:text-indigo-600 rounded-lg transition-all shadow-sm">Hoje</button>
-                        <button onClick={nextWeek} className="p-2 text-gray-500 hover:bg-white hover:text-indigo-600 rounded-lg transition-all shadow-sm"><ChevronRight className="h-4 w-4" /></button>
+                    <div className="flex items-center gap-1 lg:gap-2 bg-gray-50 p-1 rounded-xl flex-shrink-0 ml-auto sm:ml-0">
+                        <button onClick={prevWeek} className="p-1.5 lg:p-2 text-gray-500 hover:bg-white hover:text-indigo-600 rounded-lg transition-all shadow-sm"><ChevronLeft className="h-4 w-4" /></button>
+                        <button onClick={today} className="px-3 lg:px-4 py-1.5 lg:py-2 text-[10px] lg:text-xs font-bold uppercase tracking-wide text-gray-600 hover:bg-white hover:text-indigo-600 rounded-lg transition-all shadow-sm">Hoje</button>
+                        <button onClick={nextWeek} className="p-1.5 lg:p-2 text-gray-500 hover:bg-white hover:text-indigo-600 rounded-lg transition-all shadow-sm"><ChevronRight className="h-4 w-4" /></button>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                     <button
                         onClick={handleOpenAddModal}
-                        className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white text-sm font-semibold rounded-2xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all hover:-translate-y-0.5"
+                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 text-white text-sm font-semibold rounded-2xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all hover:-translate-y-0.5 active:translate-y-0"
                     >
                         <Plus className="h-4 w-4" />
                         Novo Evento
@@ -139,86 +144,126 @@ export default function StudySchedule() {
             {/* Calendar Grid */}
             <div className="flex flex-1 overflow-hidden">
                 {/* Time Column */}
-                <div className="w-16 flex-shrink-0 border-r border-gray-100 bg-gray-50/50 overflow-y-hidden pt-12">
+                <div className="w-12 lg:w-16 flex-shrink-0 border-r border-gray-100 bg-gray-50/50 overflow-y-hidden pt-[72px] lg:pt-24">
                     {hours.map(hour => (
-                        <div key={hour} className="h-[60px] text-xs font-medium text-gray-400 text-right pr-3 -mt-2.5 relative">
+                        <div key={hour} className="h-[60px] text-[10px] lg:text-xs font-medium text-gray-400 text-right pr-2 lg:pr-3 -mt-2.5 relative">
                             {hour}:00
                         </div>
                     ))}
                 </div>
 
                 {/* Days Grid - Scrollable Area */}
-                <div className="flex-1 overflow-y-auto relative">
-                    {/* Days Header */}
+                <div className="flex-1 overflow-y-auto relative no-scrollbar">
+                    {/* Days Header - Responsive */}
                     <div className="grid grid-cols-7 sticky top-0 bg-white z-20 border-b border-gray-100 shadow-sm">
                         {weekDays.map((day, i) => (
-                            <div key={i} className="py-4 text-center border-r border-gray-50 last:border-0">
+                            <div
+                                key={i}
+                                onClick={() => setSelectedDate(day)}
+                                className={cn(
+                                    "py-3 lg:py-4 text-center border-r border-gray-50 last:border-0 cursor-pointer transition-all",
+                                    isSameDay(day, selectedDate) ? "bg-indigo-50/30 lg:bg-transparent" : "hidden lg:block",
+                                    "flex-1 lg:flex-none" // On mobile, if active we show it, but lg: grid handles rest
+                                )}
+                            >
                                 <span className={cn(
-                                    "block text-xs uppercase font-bold mb-1 tracking-wider",
+                                    "block text-[10px] lg:text-xs uppercase font-bold mb-1 tracking-wider",
                                     isSameDay(day, new Date()) ? "text-indigo-600" : "text-gray-400"
                                 )}>
                                     {format(day, 'EEE', { locale: ptBR })}
                                 </span>
                                 <div className={cn(
-                                    "inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold transition-all",
-                                    isSameDay(day, new Date()) ? "bg-indigo-600 text-white shadow-md shadow-indigo-200" : "text-gray-700"
+                                    "inline-flex items-center justify-center w-7 h-7 lg:w-8 lg:h-8 rounded-full text-xs lg:text-sm font-bold transition-all",
+                                    isSameDay(day, new Date()) ? "bg-indigo-600 text-white shadow-md shadow-indigo-200" : (isSameDay(day, selectedDate) ? "bg-indigo-100 text-indigo-700" : "text-gray-700")
                                 )}>
                                     {format(day, 'd')}
                                 </div>
                             </div>
                         ))}
+
+                        {/* Mobile Day Switcher Indicator Overlay (optional, but let's just use the grid logic) */}
+                        <div className="lg:hidden col-span-7 flex justify-between px-4 py-2 bg-gray-50/50 border-t border-gray-100 items-center">
+                            <div className="flex gap-2 w-full overflow-x-auto no-scrollbar pb-1">
+                                {weekDays.map((day, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setSelectedDate(day)}
+                                        className={cn(
+                                            "flex flex-col items-center min-w-[40px] p-2 rounded-xl transition-all",
+                                            isSameDay(day, selectedDate) ? "bg-white shadow-sm ring-1 ring-black/5" : "text-gray-400"
+                                        )}
+                                    >
+                                        <span className="text-[9px] uppercase font-bold">{format(day, 'EEE', { locale: ptBR }).substring(0, 3)}</span>
+                                        <span className={cn("text-xs font-bold", isSameDay(day, selectedDate) ? "text-indigo-600" : "")}>{format(day, 'd')}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
                     </div>
 
                     {/* Week Content */}
-                    <div className="relative grid grid-cols-7 min-h-[900px] bg-white">
+                    <div className={cn(
+                        "relative grid min-h-[900px] bg-white transition-all",
+                        "grid-cols-1 lg:grid-cols-7" // 1 col on mobile, 7 on desktop
+                    )}>
                         {/* Grid Lines */}
                         {hours.map(hour => (
                             <div key={hour} className="absolute w-full border-b border-gray-50 pointer-events-none" style={{ top: `${(hour - 7) * 60}px` }} />
                         ))}
 
                         {/* Day Columns */}
-                        {weekDays.map((date, dayIndex) => (
-                            <div key={dayIndex} className="relative border-r border-gray-50 last:border-0 min-h-full hover:bg-gray-50/30 transition-colors">
-                                {/* Events */}
-                                {events.filter(e => isSameDay(e.date, date)).map((event) => (
-                                    <div
-                                        key={event.id}
-                                        style={getEventStyle(event)}
-                                        onClick={() => handleEditEvent(event)}
-                                        className={cn(
-                                            "absolute inset-x-1 p-3 text-xs rounded-xl cursor-pointer transition-all hover:scale-[1.02] hover:shadow-lg hover:z-10 group flex flex-col overflow-hidden border border-transparent hover:border-black/5",
-                                            SUBJECT_COLORS[event.subject] || 'bg-gray-100 text-gray-700'
-                                        )}
-                                    >
-                                        <div className="font-bold text-gray-900 line-clamp-2 leading-tight pr-4 text-sm mb-1">{event.title}</div>
-                                        <div className="font-medium opacity-75 text-[10px] uppercase tracking-wide">{event.subject}</div>
-
-                                        <div className="flex items-center gap-1 font-medium mt-auto text-[10px] opacity-60">
-                                            <Clock className="h-3 w-3" />
-                                            {event.start}
-                                        </div>
-
-                                        {/* Edit Pencil Icon */}
-                                        <button
-                                            className="absolute top-2 right-2 p-1.5 bg-white/50 hover:bg-white rounded-lg text-gray-500 hover:text-indigo-600 opacity-0 group-hover:opacity-100 transition-all shadow-sm"
-                                            title="Editar"
+                        {weekDays.map((date, dayIndex) => {
+                            const isSelected = isSameDay(date, selectedDate);
+                            return (
+                                <div
+                                    key={dayIndex}
+                                    className={cn(
+                                        "relative border-r border-gray-50 last:border-0 min-h-full transition-all",
+                                        isSelected ? "block" : "hidden lg:block",
+                                        "hover:bg-gray-50/30"
+                                    )}
+                                >
+                                    {/* Events */}
+                                    {events.filter(e => isSameDay(e.date, date)).map((event) => (
+                                        <div
+                                            key={event.id}
+                                            style={getEventStyle(event)}
+                                            onClick={() => handleEditEvent(event)}
+                                            className={cn(
+                                                "absolute inset-x-1 lg:inset-x-1.5 p-2 lg:p-3 text-xs rounded-xl lg:rounded-2xl cursor-pointer transition-all hover:scale-[1.01] lg:hover:scale-[1.02] hover:shadow-lg hover:z-10 group flex flex-col overflow-hidden border border-transparent hover:border-black/5",
+                                                SUBJECT_COLORS[event.subject] || 'bg-gray-100 text-gray-700 shadow-sm'
+                                            )}
                                         >
-                                            <Pencil className="h-3 w-3" />
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
+                                            <div className="font-bold text-gray-900 line-clamp-2 leading-tight pr-4 text-[11px] lg:text-sm mb-1">{event.title}</div>
+                                            <div className="font-medium opacity-80 text-[9px] lg:text-[10px] uppercase tracking-wide truncate">{event.subject}</div>
+
+                                            <div className="flex items-center gap-1 font-semibold mt-auto text-[9px] lg:text-[10px] opacity-70">
+                                                <Clock className="h-2.5 w-2.5 lg:h-3 lg:w-3" />
+                                                {event.start}
+                                            </div>
+
+                                            {/* Edit Pencil Icon */}
+                                            <button
+                                                className="absolute top-2 right-2 p-1 lg:p-1.5 bg-white/60 hover:bg-white rounded-lg text-gray-500 hover:text-indigo-600 opacity-0 group-hover:opacity-100 transition-all shadow-sm"
+                                                title="Editar"
+                                            >
+                                                <Pencil className="h-3 w-3" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
 
             {/* Clean Modal */}
             {isEventModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-300">
-                    <div className="bg-white w-full max-w-md p-8 rounded-3xl shadow-2xl relative animate-in zoom-in-95 duration-300">
+                <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
+                    <div className="bg-white w-full max-w-md p-6 lg:p-8 rounded-t-3xl sm:rounded-3xl shadow-2xl relative animate-in slide-in-from-bottom-10 sm:zoom-in-95 duration-300">
                         <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-bold text-gray-900">
+                            <h2 className="text-lg lg:text-xl font-bold text-gray-900">
                                 {editingEventId ? 'Editar Evento' : 'Novo Agendamento'}
                             </h2>
                             <button
@@ -229,9 +274,9 @@ export default function StudySchedule() {
                             </button>
                         </div>
 
-                        <div className="space-y-5">
+                        <div className="space-y-4 lg:space-y-5">
                             <div>
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wide block mb-2">O que vamos estudar?</label>
+                                <label className="text-[10px] lg:text-xs font-bold text-gray-500 uppercase tracking-wide block mb-1.5 lg:mb-2">O que vamos estudar?</label>
                                 <input
                                     type="text"
                                     placeholder="Ex: Geometria Analítica"
@@ -241,9 +286,9 @@ export default function StudySchedule() {
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-3 lg:gap-4">
                                 <div>
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wide block mb-2">Matéria</label>
+                                    <label className="text-[10px] lg:text-xs font-bold text-gray-500 uppercase tracking-wide block mb-1.5 lg:mb-2">Matéria</label>
                                     <select
                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-medium focus:bg-white focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all appearance-none"
                                         value={eventForm.subject}
@@ -255,7 +300,7 @@ export default function StudySchedule() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wide block mb-2">Data</label>
+                                    <label className="text-[10px] lg:text-xs font-bold text-gray-500 uppercase tracking-wide block mb-1.5 lg:mb-2">Data</label>
                                     <input
                                         type="date"
                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-medium focus:bg-white focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all"
@@ -265,9 +310,9 @@ export default function StudySchedule() {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-3 lg:gap-4">
                                 <div>
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wide block mb-2">Início</label>
+                                    <label className="text-[10px] lg:text-xs font-bold text-gray-500 uppercase tracking-wide block mb-1.5 lg:mb-2">Início</label>
                                     <input
                                         type="time"
                                         className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm font-medium focus:bg-white focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all"
@@ -276,7 +321,7 @@ export default function StudySchedule() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wide block mb-2">Duração (h)</label>
+                                    <label className="text-[10px] lg:text-xs font-bold text-gray-500 uppercase tracking-wide block mb-1.5 lg:mb-2">Duração (h)</label>
                                     <input
                                         type="number"
                                         min="0.5"
@@ -289,16 +334,16 @@ export default function StudySchedule() {
                             </div>
                         </div>
 
-                        <div className="pt-6 flex justify-end gap-3">
+                        <div className="pt-6 flex flex-col sm:flex-row justify-end gap-2 lg:gap-3">
                             <button
                                 onClick={() => setIsEventModalOpen(false)}
-                                className="px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
+                                className="order-2 sm:order-1 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
                             >
                                 Cancelar
                             </button>
                             <button
                                 onClick={handleSaveEvent}
-                                className="px-6 py-3 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200 rounded-xl transition-all hover:-translate-y-0.5"
+                                className="order-1 sm:order-2 px-6 py-3 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200 rounded-xl transition-all hover:-translate-y-0.5"
                             >
                                 Salvar Alterações
                             </button>
