@@ -1,42 +1,46 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-
-
-// Mock stats for dashboard
-// Note: If recharts is removed, use simple CSS bars. But user approved "best" way.
-
-
+import { Menu } from 'lucide-react';
 
 export default function Dashboard() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    // If not in root /sub-route, show dashboard content. 
-    // Wait, the router structure in App.tsx renders Dashboard as parent layout.
-    // We need to split "Layout" vs "Dashboard Home".
-    // Currently App.tsx says: /app -> Dashboard Layout.
-    // And /app/questions, /app/videos etc.
-    // The user wants a "Dashboard" home screen at /app/dashboard or similar?
-    // Let's check App.tsx again. 
-    // Ah, App.tsx has:
-    /*
-        <Route path="/app" element={<Dashboard />}>
-           <Route index element={<Navigate to="/app/questions" replace />} />
-    */
-    // This means "Dashboard.tsx" acts as the Layout wrapper. 
-    // And there is NO dedicated "Home/Stats" page currently. It redirects to Questions.
+    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-    // STRATEGY: 
-    // 1. Rename current `pages/Dashboard.tsx` to `components/Layout.tsx` (or keep as DashboardLayout).
-    // 2. Create `pages/Home.tsx` (The stats dashboard).
-    // 3. Update App.tsx logic.
-
-    // FOR NOW, to respect the file overwrite in place without breaking routing:
-    // I will write the "Layout" logic here.
     return (
-        <div className="flex h-screen bg-white">
-            <Sidebar />
-            <main className="flex-1 overflow-y-auto bg-white/50">
-                <Outlet /> {/* Renders Questions, Essay, etc */}
+        <div className="flex h-screen bg-white overflow-hidden">
+            {/* Mobile Header */}
+            <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-100 px-4 flex items-center justify-between z-40">
+                <div className="flex items-center gap-2">
+                    <div className="h-6 w-6 bg-black text-white rounded-full flex items-center justify-center">
+                        <span className="text-[10px] font-bold">G</span>
+                    </div>
+                    <span className="font-semibold text-sm text-gray-900">Gabas</span>
+                </div>
+                <button
+                    onClick={toggleSidebar}
+                    className="p-2 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                    <Menu className="h-6 w-6 text-gray-600" />
+                </button>
+            </div>
+
+            {/* Sidebar with mobile state */}
+            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+
+            {/* Main Content */}
+            <main className="flex-1 overflow-y-auto bg-white/50 pt-16 lg:pt-0">
+                <Outlet />
             </main>
+
+            {/* Mobile Overlay */}
+            {isSidebarOpen && (
+                <div
+                    className="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-40 transition-opacity"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
         </div>
     );
 }
