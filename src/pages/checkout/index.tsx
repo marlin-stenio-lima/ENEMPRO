@@ -3,6 +3,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { AbacatePayService } from '../../services/abacate';
 import { Check, Loader2, Copy, Lock, QrCode, X, AlertTriangle } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Pixel } from '../../utils/pixel';
 
 const PLANS = {
     start: {
@@ -38,6 +39,15 @@ export default function Checkout() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({ name: '', email: '', cellphone: '', cpf: '' });
+
+    useEffect(() => {
+        Pixel.track('InitiateCheckout', {
+            content_name: PLANS[plan].name,
+            content_category: 'Subscription',
+            value: PLANS[plan].price / 100,
+            currency: 'BRL'
+        });
+    }, [plan]);
 
     const [billingId, setBillingId] = useState<string | null>(null);
     const [paymentUrl, setPaymentUrl] = useState<string | null>(null);

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CheckCircle, ArrowRight } from 'lucide-react';
+import { Pixel } from '../../utils/pixel';
 
 export default function ThankYou() {
     const navigate = useNavigate();
@@ -28,6 +29,14 @@ export default function ThankYou() {
             });
             console.log('Pixel Purchase Sent:', { value, transaction_id });
         }
+
+        // 1.1 Meta Pixel Purchase Event
+        Pixel.track('Purchase', {
+            value: value,
+            currency: 'BRL',
+            content_name: state?.plan_name || 'Plano Semanal',
+            transaction_id: transaction_id
+        });
 
         // 2. Send Welcome Email (via Serverless Function)
         const userStr = localStorage.getItem('enem_pro_user');
